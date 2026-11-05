@@ -639,10 +639,25 @@ function choose(key, val) {
 
 /* ---------- Sound (starts after the first tap) ---------- */
 let ctx;
-function tone(from, to, dur, type = 'sine', when = 0, vol = .13) {
+/* Phones keep audio asleep until a tap wakes it. This also lets sound play with the iPhone ringer switch off, on newer iOS. */
+try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+function wakeAudio() {
   if (!soundOn) return;
   try {
     ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state !== 'running') {
+      ctx.resume();
+      const src = ctx.createBufferSource();
+      src.buffer = ctx.createBuffer(1, 1, 22050);
+      src.connect(ctx.destination); src.start(0);
+    }
+  } catch (e) {}
+}
+['pointerdown', 'touchend', 'click'].forEach(ev => document.addEventListener(ev, wakeAudio, { capture: true, passive: true }));
+function tone(from, to, dur, type = 'sine', when = 0, vol = .13) {
+  if (!soundOn) return;
+  try {
+    wakeAudio();
     const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + when;
     o.type = type; o.frequency.setValueAtTime(from, t); o.frequency.exponentialRampToValueAtTime(to, t + dur);
     g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur);

@@ -1,4 +1,9 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Dolly's Playroom</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -138,6 +143,39 @@ h1 {
 #reset { background: var(--paper); }
 .actions button:active, .sound:active { transform: translate(2px, 2px); box-shadow: none; }
 
+#snap { background: var(--spook); color: var(--paper); }
+.flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.flash.go { animation: flash .45s ease-out; }
+@keyframes flash { 0% { opacity: .95; } 100% { opacity: 0; } }
+.album-link {
+  margin-top: 26px; background: var(--drawer); color: var(--ink); border: 4px solid var(--ink); border-radius: 16px;
+  padding: 11px 26px 7px; font: 400 22px/1 var(--display); text-decoration: none; box-shadow: 3px 4px 0 var(--ink);
+}
+.album {
+  min-height: 100%; max-width: 1180px; margin-inline: auto; display: flex; flex-direction: column; gap: 22px;
+  padding-block: 16px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.album-title { margin: 0; font: 400 clamp(26px, 4.4vw, 46px)/1.05 var(--display); color: var(--drawer); text-shadow: 3px 3px 0 var(--ink); }
+.album-title span { color: #ffb3cf; }
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 26px 22px; }
+.polaroid {
+  position: relative; margin: 0; background: var(--paper); border: 3px solid var(--ink); padding: 10px 10px 8px; min-width: 0;
+  box-shadow: 4px 6px 0 var(--ink); transform: rotate(var(--tilt, 0deg));
+}
+.polaroid svg { display: block; width: 100%; aspect-ratio: 1; border: 3px solid var(--ink); background: var(--ink); }
+.polaroid .lid { animation: none; }
+.polaroid figcaption { padding-top: 8px; text-align: center; }
+.polaroid b { display: block; font: 400 19px/1.1 var(--display); overflow-wrap: anywhere; }
+.polaroid small { font-size: 13px; font-weight: 500; }
+.remove {
+  position: absolute; top: -12px; right: -10px; background: var(--paper); border: 3px solid var(--ink); border-radius: 12px;
+  padding: 4px 9px 1px; font-size: 13px;
+}
+.remove.sure { background: var(--pop); color: var(--paper); }
+.empty { grid-column: 1 / -1; justify-self: center; width: min(100%, 280px); }
+.empty .blank { aspect-ratio: 1; border: 3px dashed var(--ink); display: flex; align-items: center; justify-content: center; text-align: center; padding: 16px; font-size: 17px; }
 .head-btns { flex: none; display: flex; gap: 8px; }
 a.sound { color: var(--ink); text-decoration: none; font-size: 14px; }
 
@@ -199,8 +237,14 @@ a.sound { color: var(--ink); text-decoration: none; font-size: 14px; }
 @media (max-width: 760px) {
   .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 47fr) minmax(0, 53fr); padding-block: 8px; gap: 12px; min-height: 680px; }
   .left { gap: 7px; }
+  h1 { font-size: 19px; }
+  a.sound, .sound { padding: 5px 9px 3px; font-size: 13px; }
+  .head-btns { gap: 5px; }
+  .actions { gap: 6px; }
+  .actions button { font-size: 15px; padding-inline: 2px; }
+  .photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 18px; }
   .doors { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); width: min(100%, 340px); }
-  .door.main { grid-column: 1 / -1; grid-row: 1; width: 86%; margin-inline: auto; }
+  .door.main { grid-column: 1 / -1; grid-row: 1; width: 72%; margin-inline: auto; }
   .facts { display: none; }
   .card { padding: 5px 9px; }
   #name { font-size: 18px; }
@@ -212,8 +256,31 @@ a.sound { color: var(--ink); text-decoration: none; font-size: 14px; }
 @media (prefers-reduced-motion: reduce) {
   #critter, #critter.hop, #critter.tickle, #home-critter, #home-critter.hop, .lid, .heart { animation: none; }
   .tile, #pin { transition: none; }
+  .flash.go { animation: none; }
 }
 </style>
+
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="sticker-photo" x="-15%" y="-15%" width="130%" height="130%">
+    <feMorphology in="SourceAlpha" operator="dilate" radius="6" result="fat"/>
+    <feFlood flood-color="#fffdf4"/>
+    <feComposite in2="fat" operator="in" result="edge"/>
+    <feMerge><feMergeNode in="edge"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs></svg>
+
+<section class="album" id="album" aria-label="Photo album" hidden>
+  <header>
+    <h2 class="album-title"><span>Dolly's</span> Photo Album</h2>
+    <div class="head-btns">
+      <a class="sound" href="#home">Home</a>
+      <a class="sound" href="#closet">Closet</a>
+    </div>
+  </header>
+  <div class="photos" id="photos"></div>
+</section>
 
 <section class="home" id="home" aria-label="Home">
   <h2 class="home-title"><span>Dolly's</span> Playroom</h2>
@@ -237,6 +304,7 @@ a.sound { color: var(--ink); text-decoration: none; font-size: 14px; }
   </a>
   <div class="door soon" style="--c:#7fe3c0;--c2:#68d4af" aria-label="A new game is coming soon" role="img"><span class="door-label">Soon!</span></div>
   </div>
+  <a class="album-link" href="#album">Photo Album</a>
 </section>
 
 <main class="app" id="app" hidden>
@@ -245,6 +313,7 @@ a.sound { color: var(--ink); text-decoration: none; font-size: 14px; }
       <h1>Dolly's Baby Monster Closet</h1>
       <div class="head-btns">
         <a class="sound" href="#home" id="back">Home</a>
+        <a class="sound" href="#album">Album</a>
         <button class="sound" id="sound" type="button" aria-pressed="true">Sound on</button>
       </div>
     </header>
@@ -265,6 +334,7 @@ a.sound { color: var(--ink); text-decoration: none; font-size: 14px; }
         <g filter="url(#sticker)"><g id="critter"></g></g>
       </svg>
       <div class="bubble" id="bubble" aria-live="polite">Gaa!</div>
+      <div class="flash" id="flash"></div>
     </div>
     <div class="card">
       <div>
@@ -288,6 +358,7 @@ a.sound { color: var(--ink); text-decoration: none; font-size: 14px; }
       <div class="tabs" id="tabs" role="tablist"></div>
       <div class="shelf" id="shelf"></div>
       <div class="actions">
+        <button id="snap" type="button">Take photo</button>
         <button id="surprise" type="button">Surprise me</button>
         <button id="reset" type="button">Undress</button>
       </div>
@@ -610,11 +681,63 @@ $('sound').onclick = e => {
 /* ---------- Home page and the #closet link ---------- */
 const HERO = { body: 'chunk', fur: '#ff9d4d', pattern: 'spots', eyes: 'cyclops', mouth: 'fang', horns: 'uni', hat: 'bow', outfit: 'bones', shoes: 'bunny', toy: 'rattle', back: 'tail' };
 function route() {
-  const inCloset = location.hash === '#closet';
-  $('home').hidden = inCloset;
+  const inCloset = location.hash === '#closet', inAlbum = location.hash === '#album';
+  $('home').hidden = inCloset || inAlbum;
   $('app').hidden = !inCloset;
-  if (!inCloset) $('home-critter').innerHTML = monsterSVG(HERO);
+  $('album').hidden = !inAlbum;
+  if ($('home').hidden === false) $('home-critter').innerHTML = monsterSVG(HERO);
+  if (inAlbum) drawAlbum();
+  window.scrollTo(0, 0);
 }
+
+/* ---------- Photo album. Each photo stores the outfit, so it stays sharp and small. ---------- */
+const ALBUM_KEY = 'baby-monster-album-v1', MAX_PHOTOS = 100;
+let photos = [];
+try { const a = JSON.parse(localStorage.getItem(ALBUM_KEY)); if (Array.isArray(a)) photos = a.filter(p => p && BODIES[p.body]); } catch (e) {}
+const saveAlbum = () => { try { localStorage.setItem(ALBUM_KEY, JSON.stringify(photos)); } catch (e) {} };
+const TILTS = [-2.5, 1.5, -1, 2.5, -1.8, 1];
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function drawAlbum() {
+  const box = $('photos');
+  box.innerHTML = '';
+  if (!photos.length) {
+    box.innerHTML = `<figure class="polaroid empty" style="--tilt:-2deg"><div class="blank">No photos yet! Tap Take photo in the closet.</div><figcaption><b>Your monster here</b></figcaption></figure>`;
+    return;
+  }
+  photos.forEach((p, i) => {
+    const fig = document.createElement('figure');
+    fig.className = 'polaroid';
+    fig.style.setProperty('--tilt', TILTS[i % TILTS.length] + 'deg');
+    const when = new Date(p.at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    fig.innerHTML = `<svg viewBox="0 0 400 400" role="img" aria-label="Photo of ${esc(p.name)}">
+      <svg width="400" height="400" viewBox="200 100 400 400" preserveAspectRatio="xMidYMax slice">${find('room', p.room).draw()}</svg>
+      <svg width="400" height="400" viewBox="-30 -40 460 470"><g filter="url(#sticker-photo)">${monsterSVG(p)}</g></svg>
+    </svg><figcaption><b>${esc(p.name || 'Baby Monster')}</b><small>${when}</small></figcaption>`;
+    const rm = document.createElement('button');
+    rm.type = 'button'; rm.className = 'remove'; rm.textContent = 'Remove';
+    rm.onclick = () => {
+      if (!rm.classList.contains('sure')) {
+        rm.classList.add('sure'); rm.textContent = 'Sure?';
+        setTimeout(() => { rm.classList.remove('sure'); rm.textContent = 'Remove'; }, 3000);
+        return;
+      }
+      photos.splice(i, 1); saveAlbum(); drawAlbum();
+    };
+    fig.append(rm);
+    box.append(fig);
+  });
+}
+$('snap').onclick = () => {
+  const { ...shot } = state;
+  shot.at = Date.now();
+  photos.unshift(shot);
+  photos.length = Math.min(photos.length, MAX_PHOTOS);
+  saveAlbum();
+  const fl = $('flash');
+  fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go');
+  tone(1400, 900, .06, 'square', 0, .07); tone(900, 1500, .08, 'square', .09, .07);
+  react('hop', 'Cheese!');
+};
 $('door').addEventListener('click', e => {
   e.preventDefault();
   $('home-critter').classList.add('hop');
@@ -636,5 +759,5 @@ $('name').value = state.name;
 draw(); drawShelf(); route();
 })();
 </script>
-
-</body></html>
+</body>
+</html>

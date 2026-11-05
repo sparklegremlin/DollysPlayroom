@@ -1,0 +1,528 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Dolly's Baby Monster Closet</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Grandstander:wght@500;700;800&display=swap">
+<style>
+/* Layout: a die-cut sticker monster stands in its room on the left; a butter-yellow wardrobe of live previews fills the right. */
+:root {
+  --closet: #0d6c66;
+  --closet-deep: #0a5752;
+  --drawer: #ffd84d;
+  --drawer-deep: #f4bb1f;
+  --paper: #fffdf4;
+  --ink: #2a1a4a;
+  --pop: #ff4f8b;
+  --spook: #6b3fd4;
+  --display: "Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+  --body: "Grandstander", "Trebuchet MS", "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--closet);
+  background-image: radial-gradient(var(--closet-deep) 14%, transparent 15%);
+  background-size: 26px 26px;
+  color: var(--ink);
+  font-family: var(--body);
+  font-weight: 700;
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--pop); outline-offset: 2px; }
+
+.app {
+  height: 100%;
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 16px;
+  padding-block: 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  max-width: 1280px;
+  margin-inline: auto;
+}
+.left, .right { min-width: 0; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+
+header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+h1 {
+  margin: 0;
+  font: 400 clamp(24px, 3.4vw, 40px)/1 var(--display);
+  color: var(--drawer);
+  text-shadow: 3px 3px 0 var(--ink);
+  letter-spacing: .01em;
+  text-wrap: balance;
+}
+.sound {
+  flex: none; background: var(--paper); border: 3px solid var(--ink); border-radius: 999px;
+  padding: 5px 14px 3px; font-size: 14px; box-shadow: 2px 3px 0 var(--ink);
+}
+
+.stage {
+  position: relative; flex: 1; min-height: 0; overflow: hidden;
+  border: 4px solid var(--ink); border-radius: 26px; box-shadow: 4px 6px 0 var(--ink);
+  background: var(--ink);
+}
+.room, .monster { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.monster { padding: 6px; overflow: visible; }
+#critter { cursor: pointer; transform-box: fill-box; transform-origin: 50% 100%; animation: breathe 3.2s ease-in-out infinite; }
+#critter.hop { animation: hop .5s ease; }
+#critter.tickle { animation: tickle .7s ease; }
+@keyframes breathe { 50% { transform: scale(1.012, .985); } }
+@keyframes hop {
+  0% { transform: scale(1.1, .88); } 40% { transform: translateY(-34px) scale(.95, 1.06); }
+  75% { transform: scale(1.08, .9); } 100% { transform: none; }
+}
+@keyframes tickle {
+  0%, 100% { transform: none; } 20% { transform: rotate(-5deg); } 40% { transform: rotate(5deg); }
+  60% { transform: rotate(-4deg); } 80% { transform: rotate(3deg); }
+}
+.lid { transform-box: fill-box; transform-origin: 50% 0; transform: scaleY(0); animation: blink 5.3s infinite; }
+.thumb .lid { animation: none; }
+@keyframes blink { 0%, 95%, 100% { transform: scaleY(0); } 97.5% { transform: scaleY(1); } }
+
+.bubble {
+  position: absolute; top: 12px; left: 12px; max-width: 46%;
+  background: var(--paper); border: 3px solid var(--ink); border-radius: 18px 18px 18px 4px;
+  padding: 7px 14px 4px; font: 400 clamp(16px, 2vw, 21px)/1.15 var(--display);
+  box-shadow: 2px 3px 0 var(--ink);
+}
+.heart { position: absolute; font-size: 24px; color: var(--pop); pointer-events: none; animation: float 1s ease-out forwards; }
+@keyframes float { to { transform: translateY(-90px) rotate(18deg); opacity: 0; } }
+
+.card {
+  background: var(--paper); border: 4px solid var(--ink); border-radius: 16px;
+  padding: 8px 12px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 4px 16px; align-items: center;
+  box-shadow: 4px 5px 0 var(--ink);
+}
+.card-name { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--pop); font-weight: 800; }
+#name {
+  width: 100%; min-width: 0; border: 0; border-bottom: 3px dashed var(--ink); background: none;
+  font: 400 22px/1.1 var(--display); padding: 2px 0 0;
+}
+.reroll { flex: none; background: var(--drawer); border: 3px solid var(--ink); border-radius: 10px; padding: 4px 8px 1px; font-size: 13px; }
+.facts { grid-column: 1 / -1; margin: 0; font-size: 14px; font-weight: 500; line-height: 1.3; }
+.meter-row { display: flex; justify-content: space-between; font-size: 13px; }
+.meter { position: relative; height: 14px; border: 3px solid var(--ink); border-radius: 99px; background: linear-gradient(90deg, #ffb3cf, #cdb7ff, var(--spook)); margin-top: 2px; }
+#pin { position: absolute; top: -6px; width: 16px; height: 20px; margin-left: -8px; background: var(--paper); border: 3px solid var(--ink); border-radius: 7px; transition: left .3s ease; }
+#verdict { font-size: 14px; text-align: center; margin-top: 3px; }
+
+.wardrobe {
+  flex: 1; min-height: 0; display: flex; flex-direction: column;
+  background: var(--drawer); border: 4px solid var(--ink); border-radius: 26px; box-shadow: 4px 6px 0 var(--ink); overflow: hidden;
+}
+.tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; padding: 10px 10px 8px; background: var(--drawer-deep); border-bottom: 4px solid var(--ink); }
+.tab { border: 3px solid var(--ink); border-radius: 11px; background: var(--paper); padding: 6px 2px 3px; font-size: 14px; }
+.tab[aria-selected="true"] { background: var(--pop); color: var(--paper); }
+.shelf { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.shelf h2 { margin: 2px 0 0; font: 400 19px/1 var(--display); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 9px; }
+.tile {
+  display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 4px 4px 3px; min-width: 0;
+  background: var(--paper); border: 3px solid var(--ink); border-radius: 15px; font-size: 13px; line-height: 1.1;
+  transition: transform .1s;
+}
+.tile:hover { transform: translateY(-2px) rotate(-1deg); }
+.tile[aria-pressed="true"] { background: #ffd3e3; box-shadow: 0 0 0 3px var(--pop); }
+.thumb { width: 100%; aspect-ratio: 1; display: block; }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.swatch { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--ink); background: var(--c); }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--pop); }
+.actions { display: flex; gap: 8px; padding: 9px 10px; background: var(--drawer-deep); border-top: 4px solid var(--ink); }
+.actions button { flex: 1; border: 3px solid var(--ink); border-radius: 13px; padding: 9px 6px 6px; font: 400 17px/1 var(--display); box-shadow: 2px 3px 0 var(--ink); }
+#surprise { background: var(--pop); color: var(--paper); }
+#reset { background: var(--paper); }
+.actions button:active, .sound:active { transform: translate(2px, 2px); box-shadow: none; }
+
+@media (max-width: 760px) {
+  .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 47fr) minmax(0, 53fr); padding-block: 8px; gap: 12px; min-height: 680px; }
+  .left { gap: 7px; }
+  .facts { display: none; }
+  .card { padding: 5px 9px; }
+  #name { font-size: 18px; }
+  .eyebrow, #verdict, .wide { display: none; }
+  .card { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 4px 10px; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); }
+  .tab { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #critter, #critter.hop, #critter.tickle, .lid, .heart { animation: none; }
+  .tile, #pin { transition: none; }
+}
+</style>
+
+<main class="app">
+  <section class="left" aria-label="Your monster">
+    <header>
+      <h1>Dolly's Baby Monster Closet</h1>
+      <button class="sound" id="sound" type="button" aria-pressed="true">Sound on</button>
+    </header>
+    <div class="stage" id="stage">
+      <svg class="room" id="room" viewBox="0 0 800 500" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+      <svg class="monster" id="monster" viewBox="-30 -40 460 470" role="img" aria-label="Your baby monster. Tap to tickle.">
+        <defs>
+          <filter id="sticker" x="-15%" y="-15%" width="130%" height="130%">
+            <feMorphology in="SourceAlpha" operator="dilate" radius="6" result="fat"/>
+            <feFlood flood-color="#fffdf4"/>
+            <feComposite in2="fat" operator="in" result="edge"/>
+            <feOffset in="fat" dx="4" dy="6" result="drop"/>
+            <feFlood flood-color="#2a1a4a" flood-opacity=".3"/>
+            <feComposite in2="drop" operator="in" result="shade"/>
+            <feMerge><feMergeNode in="shade"/><feMergeNode in="edge"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <g filter="url(#sticker)"><g id="critter"></g></g>
+      </svg>
+      <div class="bubble" id="bubble" aria-live="polite">Gaa!</div>
+    </div>
+    <div class="card">
+      <div>
+        <div class="eyebrow">It's a monster!</div>
+        <div class="card-name">
+          <input id="name" aria-label="Monster name" maxlength="18" autocomplete="off">
+          <button class="reroll" id="rename" type="button" aria-label="New name">New<span class="wide"> name</span></button>
+        </div>
+      </div>
+      <div>
+        <div class="meter-row"><span>Snuggly</span><span>Spooky</span></div>
+        <div class="meter" aria-hidden="true"><div id="pin"></div></div>
+        <div id="verdict"></div>
+      </div>
+      <p class="facts" id="facts"></p>
+    </div>
+  </section>
+
+  <section class="right" aria-label="Wardrobe">
+    <div class="wardrobe">
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <div class="shelf" id="shelf"></div>
+      <div class="actions">
+        <button id="surprise" type="button">Surprise me</button>
+        <button id="reset" type="button">Undress</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+const INK = '#2a1a4a', PAPER = '#fffdf4';
+const S = `stroke="${INK}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"`;
+const THIN = `stroke="${INK}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;
+const LINE = `fill="none" ${S}`;
+
+/* ---------- Bodies ---------- */
+function tuftPath() {
+  let d = '';
+  for (let i = 0; i < 44; i++) {
+    const a = i / 44 * Math.PI * 2 - Math.PI / 2, r = i % 2 ? 133 : 151;
+    d += (i ? 'L' : 'M') + (200 + Math.cos(a) * r * 1.02).toFixed(1) + ' ' + (238 + Math.sin(a) * r).toFixed(1);
+  }
+  return d + 'Z';
+}
+const BODIES = {
+  gloop: { label: 'Gloop', d: 'M200 96C276 96 306 170 322 262C336 344 302 386 200 386C98 386 64 344 78 262C94 170 124 96 200 96Z',
+    top: 96, eye: 186, gap: 50, mouth: 244, neck: 272, hem: 386, hw: 124, arm: 84, armY: 292, foot: 62, hx: 48, hy: 124 },
+  tuft: { label: 'Tuft', d: tuftPath(),
+    top: 88, eye: 200, gap: 54, mouth: 258, neck: 290, hem: 389, hw: 122, arm: 62, armY: 280, foot: 58, hx: 74, hy: 120 },
+  noodle: { label: 'Noodle', d: 'M200 58C262 58 282 110 282 180L287 320C289 372 254 386 200 386C146 386 111 372 113 320L118 180C118 110 138 58 200 58Z',
+    top: 58, eye: 146, gap: 40, mouth: 204, neck: 236, hem: 386, hw: 90, arm: 116, armY: 270, foot: 52, hx: 44, hy: 84 },
+  chunk: { label: 'Chunk', d: 'M120 110Q200 90 280 110Q326 120 326 176L330 330Q330 384 276 386L124 386Q70 384 70 330L74 176Q74 120 120 110Z',
+    top: 100, eye: 188, gap: 58, mouth: 246, neck: 274, hem: 386, hw: 130, arm: 72, armY: 296, foot: 72, hx: 74, hy: 120 },
+  drip: { label: 'Drip', d: 'M200 84C280 84 318 150 318 230L322 356Q300 400 272 362Q248 400 224 362Q200 400 176 362Q152 400 128 362Q100 400 78 356L82 230C82 150 120 84 200 84Z',
+    top: 84, eye: 178, gap: 50, mouth: 236, neck: 266, hem: 372, hw: 120, arm: 82, armY: 286, foot: 74, hx: 56, hy: 112 },
+};
+const FURS = ['#7fe3c0', '#ff9ec7', '#b49bff', '#7cc8ff', '#ff9d4d', '#ffe066', '#ff6b5e', '#a6d94e', '#e8e0f5', '#5a6fd6'];
+const FUR_NAMES = ['Mint', 'Bubblegum', 'Grape', 'Sky', 'Tangerine', 'Lemon', 'Tomato', 'Slime', 'Fog', 'Midnight'];
+
+function shade(hex, f) {
+  const n = parseInt(hex.slice(1), 16);
+  const c = [n >> 16, n >> 8 & 255, n & 255].map(v => Math.round(f < 0 ? v * (1 + f) : v + (255 - v) * f));
+  return '#' + c.map(v => v.toString(16).padStart(2, '0')).join('');
+}
+
+/* ---------- Items. "s" nudges the snuggly/spooky meter. ---------- */
+const PATTERNS = [
+  { id: 'none', label: 'Plain', s: 0, draw: () => '' },
+  { id: 'belly', label: 'Tummy', s: -1, draw: (b, c) => `<ellipse cx="200" cy="${b.neck + 40}" rx="${b.hw * .72}" ry="82" fill="${shade(c, .55)}"/>` },
+  { id: 'spots', label: 'Spots', s: 0, draw: (b, c) => [[120, 150, 22], [286, 200, 28], [108, 290, 26], [270, 330, 20], [200, 345, 15], [300, 110, 16], [150, 95, 13]].map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]}" fill="${shade(c, -.18)}"/>`).join('') },
+  { id: 'stripes', label: 'Tiger', s: 1, draw: (b, c) => [120, 170, 220, 270, 320, 370].map(y => `<path d="M40 ${y}l62 16-62 16zM360 ${y}l-62 16 62 16z" fill="${shade(c, -.28)}"/>`).join('') },
+  { id: 'stars', label: 'Freckles', s: -1, draw: (b, c) => { let o = ''; for (let i = 0; i < 26; i++) o += `<circle cx="${70 + (i * 83) % 260}" cy="${80 + (i * 47) % 300}" r="5" fill="${shade(c, .6)}"/>`; return o; } },
+];
+
+function eyeball(x, y, r, look = 0, shine = true) {
+  return `<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" ${S}/>
+  <circle cx="${x + look}" cy="${y + r * .12}" r="${r * .62}" fill="${INK}"/>
+  ${shine ? `<circle cx="${x + look + r * .22}" cy="${y - r * .14}" r="${r * .24}" fill="#fff"/><circle cx="${x + look - r * .2}" cy="${y + r * .32}" r="${r * .11}" fill="#fff"/>` : ''}`;
+}
+const lid = (x, y, r, c) => `<ellipse class="lid" cx="${x}" cy="${y}" rx="${r + 2}" ry="${r + 2}" fill="${shade(c, -.1)}"/>`;
+const EYES = [
+  { id: 'big', label: 'Big', s: -2, draw: (b, c) => [-1, 1].map(k => eyeball(200 + k * b.gap, b.eye, 34) + lid(200 + k * b.gap, b.eye, 34, c)).join('') },
+  { id: 'cyclops', label: 'One eye', s: 1, draw: (b, c) => eyeball(200, b.eye, 54) + lid(200, b.eye, 54, c) },
+  { id: 'three', label: 'Three', s: 2, draw: (b, c) => [[-1, 12], [1, 12], [0, -30]].map(p => eyeball(200 + p[0] * (b.gap + 8), b.eye + p[1], 25) + lid(200 + p[0] * (b.gap + 8), b.eye + p[1], 25, c)).join('') },
+  { id: 'googly', label: 'Googly', s: 0, draw: (b, c) => eyeball(200 - b.gap, b.eye + 4, 26, -6, false) + eyeball(200 + b.gap - 4, b.eye - 6, 41, 12, false) },
+  { id: 'sleepy', label: 'Sleepy', s: -2, draw: b => [-1, 1].map(k => `<path d="M${200 + k * b.gap - 28} ${b.eye - 4}q28 26 56 0" ${LINE} stroke-width="7"/>`).join('') + `<text x="${200 + b.gap + 42}" y="${b.eye - 34}" font-family="Bagel Fat One, sans-serif" font-size="30" fill="${INK}">z</text>` },
+  { id: 'angry', label: 'Grumpy', s: 3, draw: (b, c) => [-1, 1].map(k => eyeball(200 + k * b.gap, b.eye, 30) + `<path d="M${200 + k * (b.gap + 40)} ${b.eye - 36}L${200 + k * (b.gap - 40)} ${b.eye - 6}L${200 + k * (b.gap - 40)} ${b.eye - 48}L${200 + k * (b.gap + 40)} ${b.eye - 48}Z" fill="${shade(c, -.1)}" ${S}/>`).join('') },
+];
+const tooth = (x, y, w = 13, h = 15) => `<path d="M${x - w / 2} ${y}L${x} ${y + h}L${x + w / 2} ${y}Z" fill="#fff" ${THIN}/>`;
+const MOUTHS = [
+  { id: 'smile', label: 'Two teeth', s: -1, draw: b => `<path d="M${200 - 34} ${b.mouth}q34 30 68 0" ${LINE}/><rect x="189" y="${b.mouth + 10}" width="10" height="13" rx="2" fill="#fff" ${THIN}/><rect x="201" y="${b.mouth + 10}" width="10" height="13" rx="2" fill="#fff" ${THIN}/>` },
+  { id: 'paci', label: 'Pacifier', s: -3, draw: b => `<circle cx="200" cy="${b.mouth + 9}" r="11" fill="#ffb3cf" ${S}/><ellipse cx="200" cy="${b.mouth + 12}" rx="36" ry="17" fill="#7cc8ff" ${S}/><circle cx="200" cy="${b.mouth + 12}" r="8" fill="${PAPER}" ${THIN}/>` },
+  { id: 'fang', label: 'One fang', s: 1, draw: b => `<path d="M${200 - 30} ${b.mouth + 4}q30 16 60 -6" ${LINE}/>` + tooth(218, b.mouth + 5, 16, 22) },
+  { id: 'tongue', label: 'Bleh', s: 0, draw: b => `<path d="M${200 - 32} ${b.mouth}h64" ${LINE}/><path d="M184 ${b.mouth}v18a16 16 0 0 0 32 0v-18z" fill="#ff6b8e" ${S}/><path d="M200 ${b.mouth + 4}v14" ${LINE} stroke-width="3"/>` },
+  { id: 'wail', label: 'Waaah', s: 1, draw: b => `<ellipse cx="200" cy="${b.mouth + 12}" rx="30" ry="25" fill="#7a1f3d" ${S}/><ellipse cx="200" cy="${b.mouth + 27}" rx="16" ry="8" fill="#ff6b8e"/>` },
+  { id: 'chomp', label: 'Chomper', s: 3, draw: b => `<rect x="150" y="${b.mouth - 4}" width="100" height="36" rx="16" fill="#7a1f3d" ${S}/>` + [-30, -10, 10, 30].map(x => tooth(200 + x, b.mouth - 2, 18, 17)).join('') + [-20, 0, 20].map(x => `<path d="M${200 + x - 9} ${b.mouth + 30}L${200 + x} ${b.mouth + 14}L${200 + x + 9} ${b.mouth + 30}Z" fill="#fff" ${THIN}/>`).join('') },
+];
+const both = (b, f) => f(200 - b.hx, -1) + f(200 + b.hx, 1);
+const HORNS = [
+  { id: 'none', label: 'None', s: 0, draw: () => '' },
+  { id: 'nubs', label: 'Nubs', s: 0, draw: (b, c) => both(b, (x, k) => `<path d="M${x - 19} ${b.hy}Q${x + k * 8} ${b.hy - 62} ${x + 19} ${b.hy}Z" fill="#fff1c4" ${S}/>`) },
+  { id: 'curl', label: 'Ram curls', s: 2, draw: (b, c) => both(b, (x, k) => `<path d="M${x} ${b.hy + 8}C${x + k * 26} ${b.hy - 62} ${x + k * 104} ${b.hy - 36} ${x + k * 78} ${b.hy + 22}C${x + k * 62} ${b.hy + 46} ${x + k * 36} ${b.hy + 16} ${x + k * 58} ${b.hy + 8}" fill="none" stroke="${INK}" stroke-width="29" stroke-linecap="round"/><path d="M${x} ${b.hy + 8}C${x + k * 26} ${b.hy - 62} ${x + k * 104} ${b.hy - 36} ${x + k * 78} ${b.hy + 22}C${x + k * 62} ${b.hy + 46} ${x + k * 36} ${b.hy + 16} ${x + k * 58} ${b.hy + 8}" fill="none" stroke="#e9c79b" stroke-width="19" stroke-linecap="round"/>`) },
+  { id: 'bat', label: 'Bat ears', s: 1, draw: (b, c) => both(b, (x, k) => `<path d="M${x - k * 24} ${b.hy + 14}L${x + k * 48} ${b.hy - 88}L${x + k * 62} ${b.hy + 24}Z" fill="${c}" ${S}/><path d="M${x + k * 2} ${b.hy}L${x + k * 42} ${b.hy - 60}L${x + k * 46} ${b.hy + 8}Z" fill="#ff9ec7"/>`) },
+  { id: 'floppy', label: 'Floppy', s: -3, draw: (b, c) => both(b, (x, k) => `<path d="M${x - k * 16} ${b.hy}C${x + k * 60} ${b.hy - 40} ${x + k * 118} ${b.hy + 40} ${x + k * 92} ${b.hy + 112}C${x + k * 66} ${b.hy + 128} ${x + k * 42} ${b.hy + 72} ${x + k * 20} ${b.hy + 42}Z" fill="${shade(c, -.1)}" ${S}/>`) },
+  { id: 'antenna', label: 'Boingers', s: 0, draw: b => both(b, (x, k) => `<path d="M${x} ${b.hy + 8}q${k * -6} -36 ${k * 8} -44t${k * 14} -36" ${LINE}/><circle cx="${x + k * 22}" cy="${b.hy - 80}" r="16" fill="#ffe066" ${S}/>`) },
+  { id: 'uni', label: 'Unihorn', s: 1, draw: b => `<path d="M178 ${b.top + 14}L204 ${b.top - 82}L226 ${b.top + 14}Z" fill="#ffd3e3" ${S}/><path d="M186 ${b.top - 18}l34 -10M194 ${b.top - 46}l20 -6" ${LINE} stroke-width="3.5"/>` },
+];
+const HATS = [
+  { id: 'none', label: 'None', s: 0, draw: () => '' },
+  { id: 'bonnet', label: 'Bonnet', s: -3, draw: () => `<path d="M-86 16C-92 -74 92 -74 86 16Q60 -8 0 -8T-86 16Z" fill="#ffd3e3" ${S}/>${[-68, -34, 0, 34, 68].map((x, i) => `<circle cx="${x}" cy="${i % 4 ? -13 : 6}" r="13" fill="${PAPER}" ${THIN}/>`).join('')}<path d="M-16 -56l16 12 16 -12v26l-16 -12 -16 12z" fill="#ff4f8b" ${THIN}/>` },
+  { id: 'party', label: 'Party hat', s: -1, draw: () => `<path d="M-48 8L0 -106L48 8Z" fill="#7cc8ff" ${S}/><path d="M-25 -44L24 -46M-38 -14L38 -16" stroke="#ffe066" stroke-width="10" fill="none"/><path d="M-48 8L0 -106L48 8Z" ${LINE}/><circle cy="-112" r="15" fill="#ff4f8b" ${S}/>` },
+  { id: 'crown', label: 'Crown', s: 0, draw: () => `<path d="M-62 8L-72 -62L-32 -26L0 -78L32 -26L72 -62L62 8Z" fill="#ffd84d" ${S}/><circle cy="-22" r="10" fill="#ff4f8b" ${THIN}/><circle cx="-38" cy="-8" r="6" fill="#7cc8ff" ${THIN}/><circle cx="38" cy="-8" r="6" fill="#7cc8ff" ${THIN}/>` },
+  { id: 'beanie', label: 'Pom beanie', s: -2, draw: () => `<path d="M-74 4C-78 -92 78 -92 74 4Z" fill="#ff6b5e" ${S}/><path d="M-36 -54v44M0 -64v50M36 -54v44" ${LINE} stroke-width="3.5"/><rect x="-82" y="-8" width="164" height="28" rx="12" fill="${PAPER}" ${S}/><circle cy="-76" r="23" fill="${PAPER}" ${S}/>` },
+  { id: 'prop', label: 'Propeller', s: -1, draw: () => `<path d="M-68 8C-70 -68 70 -68 68 8Z" fill="#a6d94e" ${S}/><path d="M0 -46V8M-68 8L0 -48M68 8L0 -48" ${LINE} stroke-width="3.5"/><path d="M0 -50V-66" ${LINE}/><path d="M0 -68Q-44 -92 -60 -70Q-30 -56 0 -68Q44 -92 60 -70Q30 -56 0 -68Z" fill="#ffd84d" ${S}/>` },
+  { id: 'witch', label: 'Witch hat', s: 3, draw: () => `<path d="M-46 0C-30 -50 -10 -100 34 -128C14 -80 36 -40 46 0Z" fill="#46307e" ${S}/><path d="M-104 12Q0 -28 104 12Q0 30 -104 12Z" fill="#46307e" ${S}/><path d="M-46 -8Q0 -22 46 -8" stroke="#ffd84d" stroke-width="10" fill="none"/>` },
+  { id: 'bow', label: 'Giant bow', s: -2, draw: () => `<path d="M0 -12L-86 -56L-76 38ZM0 -12L86 -56L76 38Z" fill="#ff4f8b" ${S}/><circle cy="-12" r="19" fill="#ffb3cf" ${S}/>` },
+];
+const OUTFITS = [
+  { id: 'none', label: 'Bare fuzz', s: 0, draw: () => '' },
+  { id: 'diaper', label: 'Diaper', s: -3, draw: b => { const y = b.hem - 74; return `<path d="M0 ${y}Q200 ${y + 26} 400 ${y}V430H0Z" fill="${PAPER}" ${S}/><path d="M200 ${b.hem - 2}L200 ${b.hem - 26}" ${LINE} stroke-width="3.5"/><circle cx="${200 - b.hw * .7}" cy="${y + 26}" r="11" fill="#ff9ec7" ${S}/><circle cx="${200 + b.hw * .7}" cy="${y + 26}" r="11" fill="#ff9ec7" ${S}/>`; } },
+  { id: 'onesie', label: 'Star onesie', s: -2, sleeve: '#7cc8ff', draw: b => { let st = ''; for (let i = 0; i < 12; i++) st += `<circle cx="${80 + (i * 71) % 250}" cy="${b.neck + 24 + (i * 37) % 95}" r="6" fill="#ffe066"/>`; return `<path d="M0 ${b.neck - 6}H150Q200 ${b.neck + 34} 250 ${b.neck - 6}H400V430H0Z" fill="#7cc8ff" ${S}/>${st}${[-22, 0, 22].map(x => `<circle cx="${200 + x}" cy="${b.hem - 12}" r="4.5" fill="${PAPER}" ${THIN}/>`).join('')}`; } },
+  { id: 'sweater', label: 'Stripy sweater', s: -1, sleeve: '#ff6b5e', draw: b => { const bot = b.hem - 44; let o = `<rect y="${b.neck}" width="400" height="${bot - b.neck}" fill="#ff6b5e"/>`; for (let y = b.neck + 20; y < bot; y += 40) o += `<rect y="${y}" width="400" height="20" fill="${PAPER}"/>`; return o + `<path d="M0 ${b.neck}H400M0 ${bot}H400" ${LINE}/><rect x="146" y="${b.neck - 11}" width="108" height="22" rx="11" fill="#ff6b5e" ${S}/>`; } },
+  { id: 'overalls', label: 'Overalls', s: -1, draw: b => { const y = b.neck + 44; return `<path d="M136 ${b.neck - 14}V${y}M264 ${b.neck - 14}V${y}" stroke="#4a78d4" stroke-width="20" stroke-linecap="butt"/><path d="M136 ${b.neck - 14}V${y}M264 ${b.neck - 14}V${y}" ${LINE} stroke-width="2.5" stroke-dasharray="6 6"/><path d="M0 ${y + 34}H136V${y}H264V${y + 34}H400V430H0Z" fill="#4a78d4" ${S}/><rect x="166" y="${y + 18}" width="68" height="46" rx="8" fill="#6d97ea" ${THIN}/><circle cx="136" cy="${y + 8}" r="9" fill="#ffd84d" ${THIN}/><circle cx="264" cy="${y + 8}" r="9" fill="#ffd84d" ${THIN}/>`; } },
+  { id: 'bib', label: 'Chomp bib', s: -2, draw: b => `<path d="M124 ${b.neck - 4}C124 ${b.neck + 112} 276 ${b.neck + 112} 276 ${b.neck - 4}Q200 ${b.neck + 28} 124 ${b.neck - 4}Z" fill="${PAPER}" ${S}/><text x="200" y="${b.neck + 64}" text-anchor="middle" font-family="Bagel Fat One, sans-serif" font-size="27" fill="#ff4f8b">CHOMP</text>` },
+  { id: 'tutu', label: 'Tutu', s: -2, sleeve: '#ff9ec7', draw: b => `<rect y="${b.neck}" width="400" height="200" fill="#ff9ec7"/><path d="M0 ${b.neck}H400" ${LINE}/>`, over: b => { const y = b.neck + 72; let o = ''; for (let i = -4; i <= 4; i++) o += `<ellipse cx="${200 + i * (b.hw + 26) / 4.2}" cy="${y + (4 - Math.abs(i)) * 2}" rx="30" ry="21" fill="${i % 2 ? '#ffb3cf' : '#ffd3e3'}" ${THIN}/>`; return o; } },
+  { id: 'dino', label: 'Dino jammies', s: 0, sleeve: '#74c365', draw: b => { let z = `M0 ${b.neck}`; for (let x = 0; x < 400; x += 40) z += `L${x + 20} ${b.neck + 26}L${x + 40} ${b.neck}`; return `<path d="${z}V430H0Z" fill="#74c365" ${S}/><ellipse cx="200" cy="${b.neck + 88}" rx="${b.hw * .6}" ry="56" fill="#fff1c4" ${THIN}/>`; } },
+  { id: 'bones', label: 'Bone jammies', s: 3, sleeve: '#1f1a33', draw: b => { let r = ''; for (let i = 0; i < 4; i++) r += `<path d="M${200 - 62 + i * 8} ${b.neck + 26 + i * 22}Q200 ${b.neck + 40 + i * 22} ${200 + 62 - i * 8} ${b.neck + 26 + i * 22}" fill="none" stroke="${PAPER}" stroke-width="11" stroke-linecap="round"/>`; return `<rect y="${b.neck}" width="400" height="200" fill="#1f1a33"/><path d="M0 ${b.neck}H400" ${LINE}/><path d="M200 ${b.neck + 8}V${b.neck + 112}" stroke="${PAPER}" stroke-width="13" stroke-linecap="round"/>${r}`; } },
+  { id: 'tux', label: 'Tiny tuxedo', s: 1, sleeve: '#2c2642', draw: b => `<rect y="${b.neck}" width="400" height="200" fill="#2c2642"/><path d="M0 ${b.neck}H400" ${LINE}/><path d="M154 ${b.neck}L200 ${b.neck + 112}L246 ${b.neck}Z" fill="${PAPER}" ${S}/><path d="M200 ${b.neck + 12}L170 ${b.neck - 4}V${b.neck + 28}ZM200 ${b.neck + 12}L230 ${b.neck - 4}V${b.neck + 28}Z" fill="#ff4f8b" ${THIN}/><circle cx="200" cy="${b.neck + 48}" r="4.5" fill="${INK}"/><circle cx="200" cy="${b.neck + 70}" r="4.5" fill="${INK}"/>` },
+  { id: 'rain', label: 'Raincoat', s: -1, sleeve: '#ffd84d', draw: b => `<rect y="${b.neck}" width="400" height="200" fill="#ffd84d"/><path d="M0 ${b.neck}H400M200 ${b.neck}V430" ${LINE}/>${[34, 74, 114].map(y => `<circle cx="216" cy="${b.neck + y}" r="8" fill="${PAPER}" ${THIN}/>`).join('')}` },
+];
+const foot = (x, y, c) => `<ellipse cx="${x}" cy="${y}" rx="36" ry="21" fill="${c}" ${S}/>`;
+const SHOES = [
+  { id: 'none', label: 'Bare toes', s: 0, draw: (x, y, c) => foot(x, y, c) + [-16, 0, 16].map(d => `<path d="M${x + d} ${y + 4}v13" ${LINE} stroke-width="3.5"/>`).join('') },
+  { id: 'booties', label: 'Booties', s: -2, draw: (x, y) => foot(x, y, '#ffd3e3') + `<path d="M${x - 22} ${y - 12}q22 -18 44 0" ${LINE} stroke-width="3.5"/><circle cx="${x}" cy="${y - 16}" r="8" fill="#ff4f8b" ${THIN}/>` },
+  { id: 'boots', label: 'Rain boots', s: -1, draw: (x, y) => `<path d="M${x - 24} ${y - 56}H${x + 24}V${y - 8}Q${x + 40} ${y - 4} ${x + 40} ${y + 21}H${x - 30}Z" fill="#ffd84d" ${S}/><path d="M${x - 24} ${y - 40}H${x + 24}" ${LINE} stroke-width="3.5"/>` },
+  { id: 'sneaks', label: 'Sneakers', s: 0, draw: (x, y) => foot(x, y, '#ff6b5e') + `<path d="M${x - 37} ${y + 9}H${x + 37}" stroke="${PAPER}" stroke-width="10" stroke-linecap="round"/><path d="M${x - 12} ${y - 14}l14 12M${x + 6} ${y - 18}l14 12" ${LINE} stroke-width="3.5"/>` },
+  { id: 'bunny', label: 'Bunny slippers', s: -3, draw: (x, y) => `<ellipse cx="${x - 13}" cy="${y - 34}" rx="10" ry="25" fill="${PAPER}" ${S} transform="rotate(-12 ${x - 13} ${y - 34})"/><ellipse cx="${x + 13}" cy="${y - 34}" rx="10" ry="25" fill="${PAPER}" ${S} transform="rotate(12 ${x + 13} ${y - 34})"/>` + foot(x, y, PAPER) + `<circle cx="${x - 11}" cy="${y - 3}" r="3.5" fill="${INK}"/><circle cx="${x + 11}" cy="${y - 3}" r="3.5" fill="${INK}"/><circle cx="${x}" cy="${y + 6}" r="4" fill="#ff9ec7"/>` },
+  { id: 'claws', label: 'Claw socks', s: 2, draw: (x, y, c) => foot(x, y, '#46307e') + [-22, 0, 22].map(d => `<path d="M${x + d - 7} ${y + 14}L${x + d + 3} ${y + 33}L${x + d + 8} ${y + 11}Z" fill="#fff" ${THIN}/>`).join('') },
+];
+const TOYS = [
+  { id: 'none', label: 'Empty hands', s: 0, draw: () => '' },
+  { id: 'rattle', label: 'Rattle', s: -2, draw: () => `<path d="M0 12V-52" stroke="${INK}" stroke-width="14" stroke-linecap="round"/><path d="M0 12V-52" stroke="#7cc8ff" stroke-width="6" stroke-linecap="round"/><circle cy="-78" r="29" fill="#ffd84d" ${S}/><circle cx="-10" cy="-86" r="5" fill="#ff4f8b"/><circle cx="10" cy="-78" r="5" fill="#ff4f8b"/><circle cx="-4" cy="-66" r="5" fill="#ff4f8b"/>` },
+  { id: 'teddy', label: 'Teddy', s: -3, draw: () => `<circle cx="-22" cy="-74" r="11" fill="#c98b53" ${S}/><circle cx="22" cy="-74" r="11" fill="#c98b53" ${S}/><ellipse cy="-14" rx="26" ry="29" fill="#c98b53" ${S}/><circle cy="-60" r="27" fill="#c98b53" ${S}/><ellipse cy="-52" rx="11" ry="8" fill="#f0d0a5"/><circle cx="-9" cy="-66" r="3.5" fill="${INK}"/><circle cx="9" cy="-66" r="3.5" fill="${INK}"/><circle cy="-54" r="3" fill="${INK}"/>` },
+  { id: 'bottle', label: 'Bottle', s: -2, draw: () => `<path d="M-8 -72Q0 -92 8 -72Z" fill="#e9b98a" ${S}/><rect x="-21" y="-70" width="42" height="13" rx="5" fill="#ff9ec7" ${S}/><rect x="-18" y="-58" width="36" height="74" rx="11" fill="#fff" ${S}/><rect x="-14" y="-32" width="28" height="44" rx="7" fill="#a6d94e"/>` },
+  { id: 'balloon', label: 'Balloon', s: -1, draw: () => `<path d="M0 8Q-18 -46 0 -92" ${LINE} stroke-width="3"/><ellipse cy="-138" rx="39" ry="47" fill="#ff6b5e" ${S}/><path d="M-9 -88h18l-9 -6z" fill="#ff6b5e" ${THIN}/><ellipse cx="-14" cy="-156" rx="7" ry="12" fill="#fff" opacity=".7"/>` },
+  { id: 'cookie', label: 'Cookie', s: -1, draw: () => `<path d="M26 -38A34 34 0 1 1 -2 -48Q2 -32 12 -34Q16 -24 26 -38Z" fill="#d79a5c" ${S} transform="translate(0 -8)"/><circle cx="-14" cy="-34" r="5.5" fill="${INK}"/><circle cx="6" cy="-12" r="5.5" fill="${INK}"/><circle cx="-18" cy="-10" r="4.5" fill="${INK}"/>` },
+  { id: 'trident', label: 'Tiny trident', s: 3, draw: () => `<path d="M0 26V-74" stroke="${INK}" stroke-width="12" stroke-linecap="round"/><path d="M0 26V-74" stroke="#ff6b5e" stroke-width="4.5" stroke-linecap="round"/><path d="M-27 -112V-74H27V-112L14 -90V-98L0 -128L-14 -98V-90Z" fill="#ff6b5e" ${S}/>` },
+];
+const BACKS = [
+  { id: 'none', label: 'Nothing', s: 0, draw: () => '' },
+  { id: 'tail', label: 'Spike tail', s: 2, draw: (b, c) => `<path d="M270 350Q372 386 396 296Q368 332 268 300Z" fill="${c}" ${S}/><path d="M396 296L420 262L378 276Z" fill="#fff1c4" ${S}/>` },
+  { id: 'bat', label: 'Bat wings', s: 2, draw: b => [-1, 1].map(k => `<path d="M${200 + k * 80} ${b.armY - 80}L${200 + k * 150} ${b.armY - 186}Q${200 + k * 226} ${b.armY - 150} ${200 + k * 232} ${b.armY - 32}Q${200 + k * 196} ${b.armY - 58} ${200 + k * 182} ${b.armY - 14}Q${200 + k * 154} ${b.armY - 42} ${200 + k * 130} ${b.armY}Z" fill="#6b3fd4" ${S}/>`).join('') },
+  { id: 'fairy', label: 'Fairy wings', s: -2, draw: b => [-1, 1].map(k => `<ellipse cx="${200 + k * 152}" cy="${b.armY - 110}" rx="72" ry="50" transform="rotate(${k * -32} ${200 + k * 152} ${b.armY - 110})" fill="#cdf3ff" ${S}/><ellipse cx="${200 + k * 138}" cy="${b.armY - 14}" rx="50" ry="36" transform="rotate(${k * 24} ${200 + k * 138} ${b.armY - 14})" fill="#ffd3e3" ${S}/>`).join('') },
+  { id: 'cape', label: 'Hero cape', s: 0, draw: b => `<path d="M104 ${b.neck - 30}H296Q344 ${b.neck + 40} 372 ${b.hem + 10}Q200 ${b.hem + 40} 28 ${b.hem + 10}Q56 ${b.neck + 40} 104 ${b.neck - 30}Z" fill="#e0344f" ${S}/>` },
+];
+const ROOMS = [
+  { id: 'nursery', label: 'Nursery', s: -1, wall: '#ffc2d6', draw: () => { let d = ''; for (let i = 0; i < 90; i++) d += `<circle cx="${(i % 15) * 56 + ((i / 15 | 0) % 2) * 28}" cy="${(i / 15 | 0) * 56 + 14}" r="5" fill="#ffa8c6"/>`; return `<rect width="800" height="500" fill="#ffc2d6"/>${d}<rect y="340" width="800" height="160" fill="#d59a68"/><path d="M0 340H800" stroke="${INK}" stroke-width="6"/><ellipse cx="400" cy="430" rx="280" ry="58" fill="#7cc8ff" stroke="${INK}" stroke-width="5"/><ellipse cx="400" cy="430" rx="220" ry="42" fill="#fff1c4"/><path d="M580 0V70M580 70H690M580 70H470" fill="none" stroke="${INK}" stroke-width="5"/><path d="M450 124a30 30 0 1 0 34 -34a26 26 0 0 1 -34 34Z" fill="#ffd84d" stroke="${INK}" stroke-width="5"/><path d="M470 70V92M690 70V98" stroke="${INK}" stroke-width="4"/><path d="M690 98l10 22 24 2-18 16 6 24-22-13-22 13 6-24-18-16 24-2z" fill="#7fe3c0" stroke="${INK}" stroke-width="5"/>`; } },
+  { id: 'bed', label: 'Under the bed', s: 2, wall: '#2b2147', draw: () => `<rect width="800" height="500" fill="#2b2147"/><rect y="340" width="800" height="160" fill="#463768"/><path d="M0 340H800" stroke="#14102a" stroke-width="6"/>${[0, 100, 200, 300, 400, 500, 600, 700].map(x => `<rect x="${x + 6}" y="0" width="88" height="48" fill="#6a4630" stroke="#14102a" stroke-width="5"/>`).join('')}${[[80, 170], [150, 240], [690, 150], [620, 250], [720, 270]].map(p => `<ellipse cx="${p[0]}" cy="${p[1]}" rx="11" ry="15" fill="#ffe066"/><ellipse cx="${p[0] + 32}" cy="${p[1]}" rx="11" ry="15" fill="#ffe066"/><circle cx="${p[0] + 3}" cy="${p[1]}" r="4" fill="#14102a"/><circle cx="${p[0] + 35}" cy="${p[1]}" r="4" fill="#14102a"/>`).join('')}<path d="M110 440q40 -60 80 -10q26 -8 34 16q-60 20 -114 -6Z" fill="#8a7ca8" stroke="#14102a" stroke-width="5"/><path d="M640 410h40v30q40 0 40 26h-80Z" fill="#ff6b5e" stroke="#14102a" stroke-width="5"/>` },
+  { id: 'closet', label: 'Closet', s: 0, wall: '#ffe9a8', draw: () => { const g = [['#ff6b5e', 90], ['#7cc8ff', 190], ['#a6d94e', 290], ['#ff9ec7', 520], ['#b49bff', 620], ['#ff9d4d', 720]]; return `<rect width="800" height="500" fill="#ffe9a8"/><rect y="370" width="800" height="130" fill="#b5764a"/><path d="M0 370H800" stroke="${INK}" stroke-width="6"/><path d="M0 60H800" stroke="${INK}" stroke-width="12"/>${g.map(p => `<path d="M${p[1]} 60q0 22 0 24l-44 28h88z" fill="none" stroke="${INK}" stroke-width="5"/><path d="M${p[1] - 44} 112L${p[1] - 64} 150H${p[1] - 40}V290H${p[1] + 40}V150H${p[1] + 64}L${p[1] + 44} 112Z" fill="${p[0]}" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>`).join('')}` ; } },
+  { id: 'swamp', label: 'Moon swamp', s: 1, wall: '#14594f', draw: () => `<rect width="800" height="500" fill="#14594f"/><circle cx="620" cy="100" r="62" fill="#ffe9a8" stroke="${INK}" stroke-width="5"/><path d="M0 250Q100 170 220 240T470 230T800 240V360H0Z" fill="#0d4640"/><rect y="340" width="800" height="160" fill="#2f9c82"/><path d="M0 340H800" stroke="${INK}" stroke-width="6"/>${[[110, 430], [660, 450], [590, 390], [190, 385]].map(p => `<path d="M${p[0]} ${p[1]}m-56 0a56 22 0 1 0 8 -16L${p[0]} ${p[1]}Z" fill="#a6d94e" stroke="${INK}" stroke-width="5"/>`).join('')}${[40, 72, 740, 770].map(x => `<path d="M${x} 345V190" stroke="${INK}" stroke-width="7"/><rect x="${x - 9}" y="170" width="18" height="62" rx="9" fill="#a86a3c" stroke="${INK}" stroke-width="5"/>`).join('')}` },
+  { id: 'moon', label: 'Outer space', s: 0, wall: '#1a1d5a', draw: () => { let st = ''; for (let i = 0; i < 46; i++) st += `<circle cx="${(i * 173) % 800}" cy="${(i * 97) % 330}" r="${1.5 + i % 3}" fill="#fffdf4"/>`; return `<rect width="800" height="500" fill="#1a1d5a"/>${st}<circle cx="130" cy="110" r="52" fill="#ff9d4d" stroke="${INK}" stroke-width="5"/><ellipse cx="130" cy="110" rx="92" ry="17" fill="none" stroke="#ffe066" stroke-width="8"/><path d="M0 360Q200 325 400 350T800 345V500H0Z" fill="#c9c6dd" stroke="${INK}" stroke-width="6"/>${[[120, 430, 54], [650, 410, 42], [720, 470, 30], [260, 480, 26]].map(p => `<ellipse cx="${p[0]}" cy="${p[1]}" rx="${p[2]}" ry="${p[2] * .34}" fill="#9d99ba" stroke="${INK}" stroke-width="5"/>`).join('')}`; } },
+];
+const LISTS = { pattern: PATTERNS, eyes: EYES, mouth: MOUTHS, horns: HORNS, hat: HATS, outfit: OUTFITS, shoes: SHOES, toy: TOYS, back: BACKS, room: ROOMS };
+const find = (key, id) => LISTS[key].find(i => i.id === id) || LISTS[key][0];
+
+/* ---------- Drawing ---------- */
+let clipCount = 0;
+function monsterSVG(st) {
+  const b = BODIES[st.body], c = st.fur, id = 'c' + (++clipCount);
+  const outfit = find('outfit', st.outfit), toy = st.toy !== 'none';
+  const skin = outfit.sleeve || c;
+  const ax = b.arm, ay = b.armY;
+  const hand = [400 - ax + 36, ay - 34];
+  const leftArm = `<ellipse cx="${ax - 6}" cy="${ay + 12}" rx="20" ry="35" fill="${skin}" ${S} transform="rotate(20 ${ax - 6} ${ay + 12})"/><circle cx="${ax - 19}" cy="${ay + 41}" r="14" fill="${c}" ${S}/>`;
+  const rightArm = toy
+    ? `<ellipse cx="${400 - ax + 16}" cy="${ay - 6}" rx="20" ry="37" fill="${skin}" ${S} transform="rotate(40 ${400 - ax + 16} ${ay - 6})"/><circle cx="${hand[0]}" cy="${hand[1]}" r="15" fill="${c}" ${S}/>`
+    : `<ellipse cx="${400 - ax + 6}" cy="${ay + 12}" rx="20" ry="35" fill="${skin}" ${S} transform="rotate(-20 ${400 - ax + 6} ${ay + 12})"/><circle cx="${400 - ax + 19}" cy="${ay + 41}" r="14" fill="${c}" ${S}/>`;
+  const shoe = find('shoes', st.shoes);
+  return `<clipPath id="${id}"><path d="${b.d}"/></clipPath>
+    ${find('back', st.back).draw(b, c)}
+    ${find('horns', st.horns).draw(b, c)}
+    <path d="${b.d}" fill="${c}"/>
+    <g clip-path="url(#${id})">${find('pattern', st.pattern).draw(b, c)}${outfit.draw(b)}</g>
+    <path d="${b.d}" ${LINE}/>
+    ${shoe.draw(200 - b.foot, b.hem + 2, c)}${shoe.draw(200 + b.foot, b.hem + 2, c)}
+    ${outfit.over ? outfit.over(b) : ''}
+    <ellipse cx="${200 - b.gap - 20}" cy="${b.mouth - 2}" rx="17" ry="10" fill="#ff7fa8" opacity=".55"/>
+    <ellipse cx="${200 + b.gap + 20}" cy="${b.mouth - 2}" rx="17" ry="10" fill="#ff7fa8" opacity=".55"/>
+    ${find('eyes', st.eyes).draw(b, c)}
+    ${find('mouth', st.mouth).draw(b)}
+    <g transform="translate(200 ${b.top + 14})">${find('hat', st.hat).draw()}</g>
+    ${leftArm}
+    <g transform="translate(${hand[0]} ${hand[1]})">${find('toy', st.toy).draw()}</g>
+    ${rightArm}`;
+}
+function cropFor(key, b) {
+  if (key === 'eyes') return `70 ${b.eye - 92} 260 200`;
+  if (key === 'mouth') return `100 ${b.mouth - 50} 200 130`;
+  if (key === 'horns' || key === 'hat') return `20 ${b.top - 140} 360 300`;
+  if (key === 'shoes') return `70 ${b.hem - 66} 260 124`;
+  if (key === 'outfit') return `30 ${b.neck - 60} 340 ${b.hem - b.neck + 96}`;
+  return '-40 -60 480 490';
+}
+
+/* ---------- State ---------- */
+const DEFAULT = { body: 'gloop', fur: FURS[0], pattern: 'belly', eyes: 'big', mouth: 'paci', horns: 'nubs', hat: 'bonnet', outfit: 'overalls', shoes: 'booties', toy: 'rattle', back: 'none', room: 'nursery', name: 'Baby Gloop' };
+const KEY = 'baby-monster-closet-v1';
+let state = { ...DEFAULT }, tab = 'body', soundOn = true;
+try {
+  const saved = JSON.parse(localStorage.getItem(KEY));
+  if (saved && BODIES[saved.body] && FURS.includes(saved.fur)) state = { ...DEFAULT, ...saved };
+} catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+const TABS = [['body', 'Monster'], ['eyes', 'Eyes'], ['mouth', 'Mouth'], ['horns', 'Horns'], ['hat', 'Hats'], ['outfit', 'Clothes'], ['shoes', 'Shoes'], ['toy', 'Toys'], ['back', 'Back'], ['room', 'Room']];
+const SYL1 = ['Bib', 'Moo', 'Gub', 'Snor', 'Wib', 'Pum', 'Fuzz', 'Bloop', 'Grum', 'Noo', 'Squish', 'Dribb'];
+const SYL2 = ['ble', 'kins', 'lump', 'zle', 'bug', 'lette', 'wump', 'snout', 'y', 'ums', 'gob'];
+const SNACKS = ['left socks', 'crayons', 'night-lights', 'dust bunnies', 'lost mittens', 'bedtime stories', 'jelly shoes', 'the last cookie'];
+const BABBLE = ['Gaa!', 'Blorp!', 'Mine!', 'Rawr (tiny)', 'Bleh!', 'Hee hee!', 'Grrgoo!', 'Snorf!', 'Mama?', 'Boo! Boo!', 'Pretty!', 'Nom nom'];
+const TICKLE = ['Hee hee hee!', 'Tickles!', 'Again!', 'Eep!', 'Gigglegrr!'];
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const randName = () => 'Baby ' + pick(SYL1) + pick(SYL2);
+const hash = s => [...s].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7);
+
+/* ---------- Render ---------- */
+const $ = id => document.getElementById(id);
+const critter = $('critter');
+function draw() {
+  critter.innerHTML = monsterSVG(state);
+  $('room').innerHTML = find('room', state.room).draw();
+  const total = Object.keys(LISTS).reduce((n, k) => n + find(k, state[k]).s, 0);
+  const pct = Math.max(4, Math.min(96, 50 + total * 4.5));
+  $('pin').style.left = pct + '%';
+  $('verdict').textContent = pct < 22 ? 'Extra snuggly' : pct < 44 ? 'Snuggly' : pct < 60 ? 'Mischievous' : pct < 80 ? 'A little spooky' : 'Terrifying, for a baby';
+  const h = hash(state.name || 'x');
+  $('facts').textContent = `Born under a bed. Weighs ${5 + h % 6} lb ${h % 16} oz of ${find('pattern', state.pattern).id === 'none' ? 'fuzz' : 'fluff'}. Favorite snack: ${SNACKS[h % SNACKS.length]}.`;
+}
+function tile(label, on, inner, click) {
+  const btn = document.createElement('button');
+  btn.type = 'button'; btn.className = 'tile';
+  btn.setAttribute('aria-pressed', on);
+  btn.innerHTML = inner + `<span>${label}</span>`;
+  btn.onclick = click;
+  return btn;
+}
+function drawShelf() {
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.k === tab));
+  const shelf = $('shelf'), top = shelf.scrollTop;
+  shelf.innerHTML = '';
+  const section = (title, nodes, cls = 'grid') => {
+    if (title) { const h = document.createElement('h2'); h.textContent = title; shelf.append(h); }
+    const g = document.createElement('div'); g.className = cls; g.append(...nodes); shelf.append(g);
+  };
+  const thumb = (st, box) => `<svg class="thumb" viewBox="${box}" aria-hidden="true">${monsterSVG(st)}</svg>`;
+  if (tab === 'body') {
+    section('Pick your baby', Object.keys(BODIES).map(k => tile(BODIES[k].label, state.body === k,
+      thumb({ ...DEFAULT, ...bare(state), body: k }, '-40 -60 480 490'), () => choose('body', k))));
+    section('Fur color', FURS.map((c, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'swatch'; b.style.setProperty('--c', c);
+      b.title = FUR_NAMES[i]; b.setAttribute('aria-label', FUR_NAMES[i]);
+      b.setAttribute('aria-pressed', state.fur === c); b.onclick = () => choose('fur', c);
+      return b;
+    }), 'swatches');
+    section('Fur pattern', PATTERNS.map(p => tile(p.label, state.pattern === p.id,
+      thumb({ ...bare(state), body: state.body, fur: state.fur, pattern: p.id, eyes: state.eyes, mouth: state.mouth }, '-40 -60 480 490'), () => choose('pattern', p.id))));
+  } else if (tab === 'room') {
+    section('', ROOMS.map(r => tile(r.label, state.room === r.id,
+      `<svg class="thumb" viewBox="200 0 400 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${r.draw()}</svg>`, () => choose('room', r.id))));
+  } else {
+    const b = BODIES[state.body];
+    section('', LISTS[tab].map(it => tile(it.label, state[tab] === it.id,
+      thumb({ ...state, [tab]: it.id }, cropFor(tab, b)), () => choose(tab, it.id))));
+  }
+  shelf.scrollTop = top;
+}
+const bare = st => ({ ...st, pattern: st.pattern, horns: 'none', hat: 'none', outfit: 'none', shoes: 'none', toy: 'none', back: 'none' });
+
+function react(cls, words) {
+  critter.classList.remove('hop', 'tickle');
+  void critter.getBoundingClientRect();
+  critter.classList.add(cls);
+  $('bubble').textContent = words;
+}
+critter.addEventListener('animationend', () => critter.classList.remove('hop', 'tickle'));
+function choose(key, val) {
+  state[key] = val;
+  if (key === 'body' && /^Baby (Gloop|Tuft|Noodle|Chunk|Drip)$/.test(state.name)) { state.name = 'Baby ' + BODIES[val].label; $('name').value = state.name; }
+  save(); draw(); drawShelf(); react('hop', pick(BABBLE)); squeak();
+}
+
+/* ---------- Sound (starts after the first tap) ---------- */
+let ctx;
+function tone(from, to, dur, type = 'sine', when = 0, vol = .13) {
+  if (!soundOn) return;
+  try {
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + when;
+    o.type = type; o.frequency.setValueAtTime(from, t); o.frequency.exponentialRampToValueAtTime(to, t + dur);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.001, t + dur);
+    o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + dur);
+  } catch (e) {}
+}
+const squeak = () => { const f = 380 + Math.random() * 260; tone(f, f * 1.9, .14, 'triangle'); };
+const giggle = () => [0, .11, .22, .33].forEach((w, i) => tone(620 + i * 90, 900 + i * 90, .09, 'triangle', w));
+
+/* ---------- Controls ---------- */
+TABS.forEach(([k, label]) => {
+  const t = document.createElement('button');
+  t.type = 'button'; t.className = 'tab'; t.textContent = label; t.dataset.k = k;
+  t.setAttribute('role', 'tab');
+  t.onclick = () => { tab = k; $('shelf').scrollTop = 0; drawShelf(); };
+  $('tabs').append(t);
+});
+critter.addEventListener('click', e => {
+  react('tickle', pick(TICKLE)); giggle();
+  const r = $('stage').getBoundingClientRect(), h = document.createElement('span');
+  h.className = 'heart'; h.textContent = '♥';
+  h.style.left = (e.clientX - r.left) + 'px'; h.style.top = (e.clientY - r.top - 14) + 'px';
+  $('stage').append(h); setTimeout(() => h.remove(), 1000);
+});
+$('surprise').onclick = () => {
+  state.body = pick(Object.keys(BODIES)); state.fur = pick(FURS);
+  Object.keys(LISTS).forEach(k => state[k] = pick(LISTS[k]).id);
+  state.name = randName(); $('name').value = state.name;
+  save(); draw(); drawShelf(); react('hop', pick(BABBLE)); tone(300, 900, .28, 'triangle');
+};
+$('reset').onclick = () => {
+  ['horns', 'hat', 'outfit', 'shoes', 'toy', 'back'].forEach(k => state[k] = 'none');
+  state.mouth = 'smile';
+  save(); draw(); drawShelf(); react('hop', 'Nakey!'); tone(700, 260, .22, 'triangle');
+};
+$('rename').onclick = () => { state.name = randName(); $('name').value = state.name; save(); draw(); squeak(); };
+$('name').oninput = e => { state.name = e.target.value; save(); draw(); };
+$('sound').onclick = e => {
+  soundOn = !soundOn;
+  e.target.textContent = soundOn ? 'Sound on' : 'Sound off';
+  e.target.setAttribute('aria-pressed', soundOn);
+};
+
+$('name').value = state.name;
+draw(); drawShelf();
+})();
+</script>
+
+</body></html>

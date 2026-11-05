@@ -63,7 +63,7 @@ h1 {
 }
 .sound {
   flex: none; background: var(--paper); border: 3px solid var(--ink); border-radius: 999px;
-  padding: 10px 28px 6px; font-size: 28px; box-shadow: 3px 4px 0 var(--ink);
+  padding: 7px 20px; box-shadow: 3px 4px 0 var(--ink); line-height: 0;
 }
 
 .stage {
@@ -216,6 +216,33 @@ h1 {
 .fly { position: absolute; left: 50%; bottom: 14%; width: 74px; height: 74px; margin-left: -37px; pointer-events: none; animation: fly .55s ease-in forwards; }
 @keyframes fly { to { bottom: 44%; transform: scale(.45); opacity: .85; } }
 .spark { position: absolute; font-size: 30px; color: var(--paper); text-shadow: 0 0 4px var(--pop); pointer-events: none; animation: float 1s ease-out forwards; }
+[data-i] svg, .tab svg { display: block; }
+.sound svg { width: 46px; height: 46px; margin-inline: auto; }
+#to-nursery:hover svg, #to-nursery:active svg { animation: tickle .5s ease; }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.tab svg { width: 34px; height: 34px; }
+.reroll svg { width: 30px; height: 30px; }
+.reroll { padding: 3px 5px !important; }
+.actions button { display: flex; align-items: center; justify-content: center; gap: 7px; }
+.actions svg { width: 32px; height: 32px; }
+.album-link { display: flex; align-items: center; gap: 8px; }
+.album-link svg { width: 36px; height: 36px; }
+.polaroid[role="button"] { cursor: zoom-in; }
+.zoom {
+  position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; cursor: zoom-out;
+  background: #2a1a4ae0;
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+#zoom-photo { width: min(100%, 72vh, 620px); }
+#zoom-photo .polaroid { --tilt: 0deg; cursor: zoom-out; padding: 16px 16px 12px; animation: pop .22s ease-out; }
+#zoom-photo .polaroid b { font-size: clamp(24px, 4.5vh, 36px); }
+#zoom-photo .polaroid small { font-size: 16px; }
+@keyframes pop { from { transform: scale(.7); } }
+.zoom-close {
+  position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: max(14px, env(safe-area-inset-right, 0px));
+  width: 60px; height: 60px; border-radius: 50%; background: var(--pop); color: var(--paper);
+  border: 4px solid var(--ink); font-size: 26px; font-weight: 800; box-shadow: 3px 4px 0 var(--ink);
+}
 .head-btns { flex: none; display: flex; gap: 8px; }
 a.sound { color: var(--ink); text-decoration: none; }
 
@@ -283,7 +310,10 @@ a.sound { color: var(--ink); text-decoration: none; }
   .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 47fr) minmax(0, 53fr); padding-block: 8px; gap: 12px; min-height: 740px; }
   .left { gap: 7px; }
   h1 { font-size: 19px; }
-  .sound { flex: 1 1 auto; padding: 8px 6px 4px; font-size: 23px; text-align: center; white-space: nowrap; }
+  .sound { flex: 1 1 0; padding: 5px 4px; text-align: center; }
+  .tab span:last-child { display: none; }
+  .tab { padding: 4px 2px; }
+  .tab svg { width: 36px; height: 36px; }
   .head-btns { gap: 7px; width: 100%; }
   #snap { width: 68px; height: 68px; padding: 9px; top: 8px; right: 8px; }
   .actions { gap: 6px; }
@@ -302,6 +332,7 @@ a.sound { color: var(--ink); text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   #critter, #critter.hop, #critter.tickle, #n-critter, #n-critter.hop, #n-critter.tickle, .care .need, .fly, #home-critter, #home-critter.hop, .lid, .heart { animation: none; }
   .tile, #pin { transition: none; }
+  #zoom-photo .polaroid { animation: none; }
   .flash.go { animation: none; }
 }
 </style>
@@ -321,20 +352,24 @@ a.sound { color: var(--ink); text-decoration: none; }
   <header>
     <h2 class="album-title"><span>Dolly's</span> Photo Album</h2>
     <div class="head-btns">
-      <a class="sound" href="#home">Home</a>
-      <a class="sound" href="#closet">Closet</a>
+      <a class="sound" href="#home" data-i="home" aria-label="Home" title="Home"></a>
+      <a class="sound" href="#closet" data-i="closet" aria-label="Closet" title="Closet"></a>
     </div>
   </header>
   <div class="photos" id="photos"></div>
+  <div class="zoom" id="zoom" role="dialog" aria-label="Enlarged photo" hidden>
+    <button class="zoom-close" id="zoom-close" type="button" aria-label="Close photo" title="Close photo">✕</button>
+    <div id="zoom-photo"></div>
+  </div>
 </section>
 
 <section class="nursery" id="nursery" aria-label="Monster nursery" hidden>
   <header>
     <h2 class="album-title" id="n-title"></h2>
     <div class="head-btns">
-      <a class="sound" href="#home">Home</a>
-      <a class="sound" href="#closet">Closet</a>
-      <button class="sound" id="sound2" type="button" aria-pressed="true">Sound on</button>
+      <a class="sound" href="#home" data-i="home" aria-label="Home" title="Home"></a>
+      <a class="sound" href="#closet" data-i="closet" aria-label="Closet" title="Closet"></a>
+      <button class="sound" id="sound2" type="button" aria-pressed="true" data-i="hornOn" aria-label="Sound on" title="Sound on"></button>
     </div>
   </header>
   <div class="stage" id="n-stage">
@@ -374,7 +409,7 @@ a.sound { color: var(--ink); text-decoration: none; }
   </a>
   <div class="door soon" style="--c:#7fe3c0;--c2:#68d4af" aria-label="A new game is coming soon" role="img"><span class="door-label">Soon!</span></div>
   </div>
-  <a class="album-link" href="#album">Photo Album</a>
+  <a class="album-link" href="#album" aria-label="Photo album"><span data-i="album"></span>Photo Album</a>
 </section>
 
 <main class="app" id="app" hidden>
@@ -382,9 +417,10 @@ a.sound { color: var(--ink); text-decoration: none; }
     <header>
       <h1>Dolly's Baby Monster Closet</h1>
       <div class="head-btns">
-        <a class="sound" href="#home" id="back">Home</a>
-        <a class="sound" href="#album">Album</a>
-        <button class="sound" id="sound" type="button" aria-pressed="true">Sound on</button>
+        <a class="sound" href="#home" id="back" data-i="home" aria-label="Home" title="Home"></a>
+        <a class="sound" href="#album" data-i="album" aria-label="Photo album" title="Photo album"></a>
+        <a class="sound" href="#nursery" id="to-nursery" data-i="rattle" aria-label="Monster nursery" title="Monster nursery"></a>
+        <button class="sound" id="sound" type="button" aria-pressed="true" data-i="hornOn" aria-label="Sound on" title="Sound on"></button>
       </div>
     </header>
     <div class="stage" id="stage">
@@ -414,7 +450,7 @@ a.sound { color: var(--ink); text-decoration: none; }
         <div class="eyebrow">It's a monster!</div>
         <div class="card-name">
           <input id="name" aria-label="Monster name" maxlength="18" autocomplete="off">
-          <button class="reroll" id="rename" type="button" aria-label="New name">New<span class="wide"> name</span></button>
+          <button class="reroll" id="rename" type="button" aria-label="New name" title="New name" data-i="dice"></button>
         </div>
       </div>
       <div>
@@ -431,8 +467,8 @@ a.sound { color: var(--ink); text-decoration: none; }
       <div class="tabs" id="tabs" role="tablist"></div>
       <div class="shelf" id="shelf"></div>
       <div class="actions">
-        <button id="surprise" type="button">Surprise me</button>
-        <button id="reset" type="button">Undress</button>
+        <button id="surprise" type="button" aria-label="Surprise me"><span data-i="star"></span>Surprise me</button>
+        <button id="reset" type="button" aria-label="Undress"><span data-i="undress"></span>Undress</button>
       </div>
     </div>
   </section>
@@ -444,6 +480,34 @@ const INK = '#2a1a4a', PAPER = '#fffdf4';
 const S = `stroke="${INK}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"`;
 const THIN = `stroke="${INK}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;
 const LINE = `fill="none" ${S}`;
+
+/* ---------- Picture buttons for a player who can't read yet ---------- */
+const K = `stroke="${INK}" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"`;
+const pic = inner => `<svg viewBox="0 0 48 48" aria-hidden="true">${inner}</svg>`;
+const shirt = `<path d="M16 8L4 16L10 24L14 21V42H34V21L38 24L44 16L32 8Q24 16 16 8Z" fill="#ff6b5e" ${K}/>`;
+const horn = `<path d="M6 19H14L32 8V40L14 29H6Z" fill="#ffd84d" ${K}/>`;
+const PICS = {
+  home: pic(`<path d="M5 25L24 7L43 25H37V42H11V25Z" fill="#ff9ec7" ${K}/><rect x="20" y="28" width="8" height="14" fill="#ffd84d" ${K}/>`),
+  album: pic(`<g transform="rotate(-6 24 24)"><rect x="9" y="5" width="30" height="38" fill="#fffdf4" ${K}/><rect x="13" y="9" width="22" height="22" fill="#7cc8ff" ${K}/><circle cx="24" cy="21" r="6" fill="#ff9d4d" ${K}/></g>`),
+  closet: pic(`<path d="M19 11a5 5 0 1 1 5 5v3L5 33q-2 4 3 4H40q5 0 3-4L24 19" fill="none" stroke="${INK}" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>`),
+  rattle: pic(`<path d="M31 31L42 42" stroke="${INK}" stroke-width="10" stroke-linecap="round"/><path d="M31 31L42 42" stroke="#7cc8ff" stroke-width="4" stroke-linecap="round"/><circle cx="20" cy="20" r="15" fill="#ffd84d" ${K}/><circle cx="15" cy="16" r="3" fill="#ff4f8b"/><circle cx="25" cy="17" r="3" fill="#ff4f8b"/><circle cx="20" cy="26" r="3" fill="#ff4f8b"/>`),
+  hornOn: pic(horn + `<path d="M37 17q6 7 0 14M41 11q10 13 0 26" fill="none" ${K}/>`),
+  hornOff: pic(horn + `<path d="M36 18l9 12M45 18l-9 12" fill="none" stroke="#e0344f" stroke-width="4.5" stroke-linecap="round"/>`),
+  monster: pic(`<path d="M24 6C36 6 42 20 42 34Q42 42 24 42Q6 42 6 34C6 20 12 6 24 6Z" fill="#7fe3c0" ${K}/><circle cx="17" cy="22" r="5" fill="#fff" ${K}/><circle cx="31" cy="22" r="5" fill="#fff" ${K}/><path d="M18 33q6 5 12 0" fill="none" ${K}/>`),
+  eye: pic(`<path d="M4 24Q24 4 44 24Q24 44 4 24Z" fill="#fff" ${K}/><circle cx="24" cy="24" r="8" fill="${INK}"/><circle cx="27" cy="21" r="2.5" fill="#fff"/>`),
+  mouth: pic(`<path d="M7 17Q24 50 41 17Z" fill="#7a1f3d" ${K}/><path d="M17 18L20 26L23 18Z" fill="#fff" ${K}/><path d="M27 18L29 25L32 18Z" fill="#fff" ${K}/>`),
+  horn: pic(`<path d="M13 43Q11 17 37 5Q30 24 35 43Z" fill="#fff1c4" ${K}/>`),
+  hat: pic(`<path d="M9 41L24 10L39 41Z" fill="#7cc8ff" ${K}/><circle cx="24" cy="9" r="5" fill="#ff4f8b" ${K}/>`),
+  shirt: pic(shirt),
+  shoe: pic(`<path d="M6 13H22L26 24Q43 26 43 38H6Z" fill="#ff9ec7" ${K}/><path d="M6 38H43" ${K}/>`),
+  teddy: pic(`<circle cx="12" cy="12" r="6.5" fill="#c98b53" ${K}/><circle cx="36" cy="12" r="6.5" fill="#c98b53" ${K}/><circle cx="24" cy="25" r="17" fill="#c98b53" ${K}/><ellipse cx="24" cy="31" rx="7" ry="5" fill="#f0d0a5"/><circle cx="17" cy="22" r="2.5" fill="${INK}"/><circle cx="31" cy="22" r="2.5" fill="${INK}"/><circle cx="24" cy="29" r="2.2" fill="${INK}"/>`),
+  wing: pic(`<path d="M5 11Q32 5 44 31Q32 26 29 38Q21 28 16 35Q13 22 5 11Z" fill="#b49bff" ${K}/>`),
+  door: pic(`<path d="M11 43V19Q11 5 24 5Q37 5 37 19V43Z" fill="#74c365" ${K}/><circle cx="31" cy="26" r="2.8" fill="#ffd84d" ${K}/>`),
+  star: pic(`<path d="M24 5l6 13 14 2-10 10 2 14-12-7-12 7 2-14L4 20l14-2Z" fill="#ffd84d" ${K}/>`),
+  undress: pic(shirt + `<path d="M7 41L41 7" stroke="#fffdf4" stroke-width="9" stroke-linecap="round"/><path d="M7 41L41 7" stroke="#e0344f" stroke-width="5" stroke-linecap="round"/>`),
+  dice: pic(`<rect x="7" y="7" width="34" height="34" rx="8" fill="#fffdf4" ${K}/>${[[16, 16], [32, 16], [24, 24], [16, 32], [32, 32]].map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3.2" fill="${INK}"/>`).join('')}`),
+};
+document.querySelectorAll('[data-i]').forEach(el => { el.insertAdjacentHTML('afterbegin', PICS[el.dataset.i]); });
 
 /* ---------- Bodies ---------- */
 function tuftPath() {
@@ -624,7 +688,7 @@ try {
 } catch (e) {}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
 
-const TABS = [['body', 'Monster'], ['eyes', 'Eyes'], ['mouth', 'Mouth'], ['horns', 'Horns'], ['hat', 'Hats'], ['outfit', 'Clothes'], ['shoes', 'Shoes'], ['toy', 'Toys'], ['back', 'Back'], ['room', 'Room']];
+const TABS = [['body', 'Monster', 'monster'], ['eyes', 'Eyes', 'eye'], ['mouth', 'Mouth', 'mouth'], ['horns', 'Horns', 'horn'], ['hat', 'Hats', 'hat'], ['outfit', 'Clothes', 'shirt'], ['shoes', 'Shoes', 'shoe'], ['toy', 'Toys', 'teddy'], ['back', 'Back', 'wing'], ['room', 'Room', 'door']];
 const SYL1 = ['Bib', 'Moo', 'Gub', 'Snor', 'Wib', 'Pum', 'Fuzz', 'Bloop', 'Grum', 'Noo', 'Squish', 'Dribb'];
 const SYL2 = ['ble', 'kins', 'lump', 'zle', 'bug', 'lette', 'wump', 'snout', 'y', 'ums', 'gob'];
 const SNACKS = ['left socks', 'crayons', 'night-lights', 'dust bunnies', 'lost mittens', 'bedtime stories', 'jelly shoes', 'the last cookie'];
@@ -732,9 +796,10 @@ const squeak = () => { const f = 380 + Math.random() * 260; tone(f, f * 1.9, .14
 const giggle = () => [0, .11, .22, .33].forEach((w, i) => tone(620 + i * 90, 900 + i * 90, .09, 'triangle', w));
 
 /* ---------- Controls ---------- */
-TABS.forEach(([k, label]) => {
+TABS.forEach(([k, label, icon]) => {
   const t = document.createElement('button');
-  t.type = 'button'; t.className = 'tab'; t.textContent = label; t.dataset.k = k;
+  t.type = 'button'; t.className = 'tab'; t.innerHTML = PICS[icon] + `<span>${label}</span>`; t.dataset.k = k;
+  t.setAttribute('aria-label', label);
   t.setAttribute('role', 'tab');
   t.onclick = () => { tab = k; $('shelf').scrollTop = 0; drawShelf(); };
   $('tabs').append(t);
@@ -762,7 +827,9 @@ $('name').oninput = e => { state.name = e.target.value; save(); draw(); };
 ['sound', 'sound2'].forEach(id => $(id).onclick = () => {
   soundOn = !soundOn;
   ['sound', 'sound2'].forEach(k => {
-    $(k).textContent = soundOn ? 'Sound on' : 'Sound off';
+    const word = soundOn ? 'Sound on' : 'Sound off';
+    $(k).innerHTML = PICS[soundOn ? 'hornOn' : 'hornOff'];
+    $(k).setAttribute('aria-label', word); $(k).title = word;
     $(k).setAttribute('aria-pressed', soundOn);
   });
 });
@@ -780,6 +847,7 @@ function route() {
     $('door2-critter').innerHTML = monsterSVG({ ...HERO, outfit: 'diaper', eyes: 'sleepy', mouth: 'paci', hat: 'none', toy: 'none', back: 'none', shoes: 'none' });
   }
   if (inNursery) enterNursery();
+  closePhoto();
   if (inAlbum) drawAlbum();
   window.scrollTo(0, 0);
 }
@@ -807,9 +875,15 @@ function drawAlbum() {
       <svg width="400" height="400" viewBox="200 100 400 400" preserveAspectRatio="xMidYMax slice">${find('room', p.room).draw()}</svg>
       <svg width="400" height="400" viewBox="-30 -40 460 470"><g filter="url(#sticker-photo)">${monsterSVG(p)}</g></svg>
     </svg><figcaption><b>${esc(p.name || 'Baby Monster')}</b><small>${when}</small></figcaption>`;
+    fig.setAttribute('role', 'button'); fig.tabIndex = 0;
+    fig.setAttribute('aria-label', 'Enlarge photo of ' + (p.name || 'Baby Monster'));
+    const big = () => openPhoto(fig);
+    fig.onclick = big;
+    fig.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); big(); } };
     const rm = document.createElement('button');
     rm.type = 'button'; rm.className = 'remove'; rm.textContent = 'Remove';
-    rm.onclick = () => {
+    rm.onclick = e => {
+      e.stopPropagation();
       if (!rm.classList.contains('sure')) {
         rm.classList.add('sure'); rm.textContent = 'Sure?';
         setTimeout(() => { rm.classList.remove('sure'); rm.textContent = 'Remove'; }, 3000);
@@ -821,6 +895,25 @@ function drawAlbum() {
     box.append(fig);
   });
 }
+let zoomedFrom = null;
+function openPhoto(fig) {
+  const copy = fig.cloneNode(true);
+  copy.querySelector('.remove').remove();
+  ['role', 'tabindex', 'aria-label'].forEach(a => copy.removeAttribute(a));
+  $('zoom-photo').replaceChildren(copy);
+  $('zoom').hidden = false;
+  zoomedFrom = fig;
+  $('zoom-close').focus();
+  tone(500, 900, .12, 'triangle');
+}
+function closePhoto() {
+  if ($('zoom').hidden) return;
+  $('zoom').hidden = true;
+  $('zoom-photo').replaceChildren();
+  if (zoomedFrom && zoomedFrom.isConnected) zoomedFrom.focus();
+}
+$('zoom').onclick = closePhoto;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePhoto(); });
 $('snap').onclick = () => {
   const { ...shot } = state;
   shot.at = Date.now();
@@ -842,6 +935,7 @@ $('door').addEventListener('click', e => {
     route();
   }, 450);
 });
+$('to-nursery').addEventListener('click', () => [0, .09, .18, .27, .36].forEach(w => tone(1500, 1100, .05, 'square', w, .05)));
 $('back').addEventListener('click', e => {
   e.preventDefault();
   location.hash = 'home';

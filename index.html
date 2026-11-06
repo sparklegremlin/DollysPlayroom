@@ -566,6 +566,7 @@ const EYES = [
   { id: 'googly', label: 'Googly', s: 0, draw: (b, c) => eyeball(200 - b.gap, b.eye + 4, 26, -6, false) + eyeball(200 + b.gap - 4, b.eye - 6, 41, 12, false) },
   { id: 'sleepy', label: 'Sleepy', s: -2, draw: b => [-1, 1].map(k => `<path d="M${200 + k * b.gap - 28} ${b.eye - 4}q28 26 56 0" ${LINE} stroke-width="7"/>`).join('') + `<text x="${200 + b.gap + 42}" y="${b.eye - 34}" font-family="Bagel Fat One, sans-serif" font-size="30" fill="${INK}">z</text>` },
   { id: 'angry', label: 'Grumpy', s: 3, draw: (b, c) => [-1, 1].map(k => eyeball(200 + k * b.gap, b.eye, 30) + `<path d="M${200 + k * (b.gap + 40)} ${b.eye - 36}L${200 + k * (b.gap - 40)} ${b.eye - 6}L${200 + k * (b.gap - 40)} ${b.eye - 48}L${200 + k * (b.gap + 40)} ${b.eye - 48}Z" fill="${shade(c, -.1)}" ${S}/>`).join('') },
+  { id: 'glam', label: 'Glam eyes', s: 0, draw: (b, c) => [-1, 1].map(k => { const x = 200 + k * b.gap; return `<ellipse cx="${x}" cy="${b.eye - 9}" rx="42" ry="42" fill="#4fb7ff" ${S}/>` + eyeball(x, b.eye, 31) + [-22, 0, 22].map(d => `<path d="M${x + d} ${b.eye - 31 + Math.abs(d) * .3}l${d * .3} -15" ${LINE} stroke-width="4"/>`).join('') + lid(x, b.eye, 31, c); }).join('') },
 ];
 const tooth = (x, y, w = 13, h = 15) => `<path d="M${x - w / 2} ${y}L${x} ${y + h}L${x + w / 2} ${y}Z" fill="#fff" ${THIN}/>`;
 const MOUTHS = [
@@ -575,6 +576,7 @@ const MOUTHS = [
   { id: 'tongue', label: 'Bleh', s: 0, draw: b => `<path d="M${200 - 32} ${b.mouth}h64" ${LINE}/><path d="M184 ${b.mouth}v18a16 16 0 0 0 32 0v-18z" fill="#ff6b8e" ${S}/><path d="M200 ${b.mouth + 4}v14" ${LINE} stroke-width="3"/>` },
   { id: 'wail', label: 'Waaah', s: 1, draw: b => `<ellipse cx="200" cy="${b.mouth + 12}" rx="30" ry="25" fill="#7a1f3d" ${S}/><ellipse cx="200" cy="${b.mouth + 27}" rx="16" ry="8" fill="#ff6b8e"/>` },
   { id: 'chomp', label: 'Chomper', s: 3, draw: b => `<rect x="150" y="${b.mouth - 4}" width="100" height="36" rx="16" fill="#7a1f3d" ${S}/>` + [-30, -10, 10, 30].map(x => tooth(200 + x, b.mouth - 2, 18, 17)).join('') + [-20, 0, 20].map(x => `<path d="M${200 + x - 9} ${b.mouth + 30}L${200 + x} ${b.mouth + 14}L${200 + x + 9} ${b.mouth + 30}Z" fill="#fff" ${THIN}/>`).join('') },
+  { id: 'lips', label: 'Red lips', s: -1, draw: b => { const y = b.mouth + 8; return `<path d="M164 ${y}Q182 ${y - 18} 200 ${y - 7}Q218 ${y - 18} 236 ${y}Q200 ${y + 32} 164 ${y}Z" fill="#d9192f" ${S}/><path d="M172 ${y + 1}Q200 ${y + 8} 228 ${y + 1}" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/><ellipse cx="214" cy="${y + 11}" rx="7" ry="3" fill="#ff8f9f"/>`; } },
 ];
 const both = (b, f) => f(200 - b.hx, -1) + f(200 + b.hx, 1);
 const HORNS = [
@@ -595,6 +597,7 @@ const HATS = [
   { id: 'prop', label: 'Propeller', s: -1, draw: () => `<path d="M-68 8C-70 -68 70 -68 68 8Z" fill="#a6d94e" ${S}/><path d="M0 -46V8M-68 8L0 -48M68 8L0 -48" ${LINE} stroke-width="3.5"/><path d="M0 -50V-66" ${LINE}/><path d="M0 -68Q-44 -92 -60 -70Q-30 -56 0 -68Q44 -92 60 -70Q30 -56 0 -68Z" fill="#ffd84d" ${S}/>` },
   { id: 'witch', label: 'Witch hat', s: 3, draw: () => `<path d="M-46 0C-30 -50 -10 -100 34 -128C14 -80 36 -40 46 0Z" fill="#46307e" ${S}/><path d="M-104 12Q0 -28 104 12Q0 30 -104 12Z" fill="#46307e" ${S}/><path d="M-46 -8Q0 -22 46 -8" stroke="#ffd84d" stroke-width="10" fill="none"/>` },
   { id: 'bow', label: 'Giant bow', s: -2, draw: () => `<path d="M0 -12L-86 -56L-76 38ZM0 -12L86 -56L76 38Z" fill="#ff4f8b" ${S}/><circle cy="-12" r="19" fill="#ffb3cf" ${S}/>` },
+  { id: 'curls', label: 'Big red curls', s: 0, draw: () => { const spots = [[-112, 72, 20], [112, 72, 20], [-116, 34, 23], [116, 34, 23], [-108, -4, 27], [108, -4, 27], [-84, -40, 30], [84, -40, 30], [-46, -62, 32], [46, -62, 32], [0, -72, 33], [-40, -24, 28], [0, -30, 30], [40, -24, 28]]; return spots.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="${p[2]}" fill="#d9321f" ${S}/><path d="M${p[0] - p[2] * .4} ${p[1]}a${p[2] * .4} ${p[2] * .4} 0 1 1 ${p[2] * .4} ${p[2] * .4}" fill="none" stroke="#ff8a5c" stroke-width="4" stroke-linecap="round"/>`).join(''); } },
 ];
 const OUTFITS = [
   { id: 'none', label: 'Bare fuzz', s: 0, draw: () => '' },
@@ -608,6 +611,7 @@ const OUTFITS = [
   { id: 'bones', label: 'Bone jammies', s: 3, sleeve: '#1f1a33', draw: b => { let r = ''; for (let i = 0; i < 4; i++) r += `<path d="M${200 - 62 + i * 8} ${b.neck + 26 + i * 22}Q200 ${b.neck + 40 + i * 22} ${200 + 62 - i * 8} ${b.neck + 26 + i * 22}" fill="none" stroke="${PAPER}" stroke-width="11" stroke-linecap="round"/>`; return `<rect y="${b.neck}" width="400" height="200" fill="#1f1a33"/><path d="M0 ${b.neck}H400" ${LINE}/><path d="M200 ${b.neck + 8}V${b.neck + 112}" stroke="${PAPER}" stroke-width="13" stroke-linecap="round"/>${r}`; } },
   { id: 'tux', label: 'Tiny tuxedo', s: 1, sleeve: '#2c2642', draw: b => `<rect y="${b.neck}" width="400" height="200" fill="#2c2642"/><path d="M0 ${b.neck}H400" ${LINE}/><path d="M154 ${b.neck}L200 ${b.neck + 112}L246 ${b.neck}Z" fill="${PAPER}" ${S}/><path d="M200 ${b.neck + 12}L170 ${b.neck - 4}V${b.neck + 28}ZM200 ${b.neck + 12}L230 ${b.neck - 4}V${b.neck + 28}Z" fill="#ff4f8b" ${THIN}/><circle cx="200" cy="${b.neck + 48}" r="4.5" fill="${INK}"/><circle cx="200" cy="${b.neck + 70}" r="4.5" fill="${INK}"/>` },
   { id: 'rain', label: 'Raincoat', s: -1, sleeve: '#ffd84d', draw: b => `<rect y="${b.neck}" width="400" height="200" fill="#ffd84d"/><path d="M0 ${b.neck}H400M200 ${b.neck}V430" ${LINE}/>${[34, 74, 114].map(y => `<circle cx="216" cy="${b.neck + y}" r="8" fill="${PAPER}" ${THIN}/>`).join('')}` },
+  { id: 'sparkle', label: 'Sparkle dress', s: -1, sleeve: '#ff5fa8', draw: b => { const y = b.neck; let d = ''; for (let r = 0; r < 7; r++) for (let i = 0; i < 13; i++) d += `<circle cx="${30 + i * 28 + (r % 2) * 14}" cy="${y + 26 + r * 19}" r="4.5" fill="${(i + r) % 3 ? '#ffd84d' : '#fffdf4'}"/>`; let f = ''; for (let x = 12; x < 400; x += 15) f += `<path d="M${x} ${b.hem - 46}v44" stroke="#ffd84d" stroke-width="6"/>`; return `<path d="M0 ${y + 12}Q100 ${y - 14} 200 ${y + 16}Q300 ${y - 14} 400 ${y + 12}V430H0Z" fill="#ff5fa8" ${S}/>${d}${f}<path d="M0 ${b.hem - 46}H400" ${LINE}/>`; } },
 ];
 const foot = (x, y, c) => `<ellipse cx="${x}" cy="${y}" rx="36" ry="21" fill="${c}" ${S}/>`;
 const SHOES = [
@@ -617,6 +621,7 @@ const SHOES = [
   { id: 'sneaks', label: 'Sneakers', s: 0, draw: (x, y) => foot(x, y, '#ff6b5e') + `<path d="M${x - 37} ${y + 9}H${x + 37}" stroke="${PAPER}" stroke-width="10" stroke-linecap="round"/><path d="M${x - 12} ${y - 14}l14 12M${x + 6} ${y - 18}l14 12" ${LINE} stroke-width="3.5"/>` },
   { id: 'bunny', label: 'Bunny slippers', s: -3, draw: (x, y) => `<ellipse cx="${x - 13}" cy="${y - 34}" rx="10" ry="25" fill="${PAPER}" ${S} transform="rotate(-12 ${x - 13} ${y - 34})"/><ellipse cx="${x + 13}" cy="${y - 34}" rx="10" ry="25" fill="${PAPER}" ${S} transform="rotate(12 ${x + 13} ${y - 34})"/>` + foot(x, y, PAPER) + `<circle cx="${x - 11}" cy="${y - 3}" r="3.5" fill="${INK}"/><circle cx="${x + 11}" cy="${y - 3}" r="3.5" fill="${INK}"/><circle cx="${x}" cy="${y + 6}" r="4" fill="#ff9ec7"/>` },
   { id: 'claws', label: 'Claw socks', s: 2, draw: (x, y, c) => foot(x, y, '#46307e') + [-22, 0, 22].map(d => `<path d="M${x + d - 7} ${y + 14}L${x + d + 3} ${y + 33}L${x + d + 8} ${y + 11}Z" fill="#fff" ${THIN}/>`).join('') },
+  { id: 'cowgirl', label: 'Cowgirl boots', s: 0, draw: (x, y) => `<path d="M${x - 24} ${y - 58}Q${x} ${y - 44} ${x + 26} ${y - 58}V${y - 8}Q${x + 44} ${y + 2} ${x + 50} ${y + 21}H${x - 30}Z" fill="${PAPER}" ${S}/><path d="M${x + 1} ${y - 38}l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#ff5fa8" ${THIN}/><path d="M${x - 30} ${y + 21}H${x + 50}" stroke="#ff5fa8" stroke-width="6" stroke-linecap="round"/>` },
 ];
 const TOYS = [
   { id: 'none', label: 'Empty hands', s: 0, draw: () => '' },
@@ -626,6 +631,7 @@ const TOYS = [
   { id: 'balloon', label: 'Balloon', s: -1, draw: () => `<path d="M0 8Q-18 -46 0 -92" ${LINE} stroke-width="3"/><ellipse cy="-138" rx="39" ry="47" fill="#ff6b5e" ${S}/><path d="M-9 -88h18l-9 -6z" fill="#ff6b5e" ${THIN}/><ellipse cx="-14" cy="-156" rx="7" ry="12" fill="#fff" opacity=".7"/>` },
   { id: 'cookie', label: 'Cookie', s: -1, draw: () => `<path d="M26 -38A34 34 0 1 1 -2 -48Q2 -32 12 -34Q16 -24 26 -38Z" fill="#d79a5c" ${S} transform="translate(0 -8)"/><circle cx="-14" cy="-34" r="5.5" fill="${INK}"/><circle cx="6" cy="-12" r="5.5" fill="${INK}"/><circle cx="-18" cy="-10" r="4.5" fill="${INK}"/>` },
   { id: 'trident', label: 'Tiny trident', s: 3, draw: () => `<path d="M0 26V-74" stroke="${INK}" stroke-width="12" stroke-linecap="round"/><path d="M0 26V-74" stroke="#ff6b5e" stroke-width="4.5" stroke-linecap="round"/><path d="M-27 -112V-74H27V-112L14 -90V-98L0 -128L-14 -98V-90Z" fill="#ff6b5e" ${S}/>` },
+  { id: 'mic', label: 'Microphone', s: 0, draw: () => `<path d="M0 16V-48" stroke="${INK}" stroke-width="20" stroke-linecap="round"/><path d="M0 16V-48" stroke="#46307e" stroke-width="10" stroke-linecap="round"/><rect x="-14" y="-52" width="28" height="11" rx="4" fill="#ff5fa8" ${THIN}/><circle cy="-73" r="24" fill="#d6d3e6" ${S}/><path d="M-20 -80H20M-22 -68H22M-8 -95V-51M8 -95V-51" fill="none" stroke="${INK}" stroke-width="2.5"/>` },
 ];
 const BACKS = [
   { id: 'none', label: 'Nothing', s: 0, draw: () => '' },

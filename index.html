@@ -602,7 +602,7 @@ function part(key, fy0, fy1, x, y, w, flip) {
   return flip ? `<g transform="scale(-1 1)">${inner}</g>` : inner;
 }
 const W = (key, k, b) => ART[key].w * k * sc(b);
-const eye = (id, label, s, dy = 0) => ({ id, label, s, draw: b => { const k = .88 * (2 * b.gap + 76) / ART['eyes-big'].w; return center('eyes-' + id, 200, b.eye + dy, ART['eyes-' + id].w * k); } });
+const eye = (id, label, s, dy = 0) => ({ id, label, s, draw: b => { const k = .75 * (2 * b.gap + 76) / ART['eyes-big'].w; return center('eyes-' + id, 200, b.eye + dy, ART['eyes-' + id].w * k); } });
 const EYES = [
   eye('big', 'Big', -2), eye('cyclops', 'One eye', 1, -4), eye('three', 'Three', 2, -14), eye('googly', 'Googly', 0),
   eye('sleepy', 'Sleepy', -2, 6), eye('angry', 'Grumpy', 3, -8), eye('glam', 'Glam eyes', 0, -6), eye('sparkle', 'Sparkly', -2),
@@ -610,7 +610,7 @@ const EYES = [
 ];
 const IRIS = ['#4fa3ff', '#9b6a43', '#5cc46a', '#9a6bff', '#ff6fae', '#f5b82e', '#e8484e', '#8d8da0'];
 const IRIS_NAMES = ['Blue', 'Brown', 'Green', 'Purple', 'Pink', 'Gold', 'Red', 'Gray'];
-const mouth = (id, label, s, k = 1, dy = 6) => ({ id, label, s, draw: b => center('mouths-' + id, 200, b.mouth + dy, ART['mouths-' + id].w * k * 84 / ART['mouths-smile'].w * Math.min(1, b.hw / 115)) });
+const mouth = (id, label, s, k = 1, dy = 6) => ({ id, label, s, draw: b => center('mouths-' + id, 200, b.mouth + dy, ART['mouths-' + id].w * k * 68 / ART['mouths-smile'].w * Math.min(1, b.hw / 115)) });
 const MOUTHS = [
   mouth('smile', 'Two teeth', -1), mouth('paci', 'Pacifier', -3), mouth('fang', 'One fang', 1), mouth('tongue', 'Bleh', 0),
   mouth('wail', 'Waaah', 1), mouth('chomp', 'Chomper', 3),
@@ -1037,6 +1037,14 @@ $('back').addEventListener('click', e => {
   route();
 });
 window.addEventListener('hashchange', route);
+// Some viewers don't report hash changes from plain links, so every in-page link routes directly.
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || a.id === 'door' || a.id === 'back') return;
+  e.preventDefault();
+  try { history.replaceState(null, '', a.getAttribute('href')); } catch (x) { location.hash = a.getAttribute('href'); }
+  route();
+});
 
 /* ---------- Monster Nursery. Needs only nudge; the monster never gets hurt. ---------- */
 const OUT = `stroke="${INK}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"`;
